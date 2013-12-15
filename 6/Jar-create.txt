@@ -1,0 +1,13 @@
+-> Creazione <-
+- Creare le classi
+- In tutte le classi di un pacchetto aggiungere
+package PincoPallo;
+- Compilare tutte le classi (quindi *.class)
+- Pachettizzare con
+$ jar cf pacchetto.jar *.class
+
+-> Utilizzo di un package <-
+- importare il package nella classe con
+import PincoPallo.*;
+- in compilazione, usare
+$ javac -cp /path/to/your/package Class.java
