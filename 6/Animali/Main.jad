@@ -1,0 +1,59 @@
+// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.geocities.com/kpdus/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   Main.java
+
+import Animali.*;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Main
+{
+
+    Main()
+    {
+    }
+
+    public static void main(String args[])
+    {
+        ArrayList arraylist = new ArrayList();
+        Scanner scanner = new Scanner(System.in);
+        do
+        {
+            System.out.print("Inserisci [s] per uno squalo o [c] per un cane: ");
+            char c = scanner.nextLine().toLowerCase().charAt(0);
+            switch(c)
+            {
+            case 115: // 's'
+                System.out.println("Aggiungo uno squalo...");
+                Shark shark = new Shark();
+                arraylist.add(shark);
+                break;
+
+            case 99: // 'c'
+                System.out.println("Aggiungo un cane...");
+                Dog dog = new Dog();
+                arraylist.add(dog);
+                break;
+
+            default:
+                System.out.println("Scelta non valida!");
+                break;
+            }
+            System.out.println("Inserisci qualcosa per un nuovo animale, altrimenti premi INVIO");
+        } while(scanner.hasNext());
+        for(int i = 0; i < arraylist.size(); i++)
+            System.out.println((new StringBuilder()).append("L'animale ").append(i + 1).append(" dice: ").append(((Animal)arraylist.get(i)).sayHello()).toString());
+
+        int j = 0;
+        int k = 0;
+        for(; j < arraylist.size(); j++)
+            if(arraylist.get(j) instanceof Dog)
+            {
+                System.out.println((new StringBuilder()).append("Il cane ").append(k + 1).append(" dice: ").append(((Dog)arraylist.get(j)).getChipCode()).toString());
+                k++;
+            }
+
+    }
+}

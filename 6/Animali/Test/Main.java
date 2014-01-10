@@ -9,10 +9,11 @@ class Main {
         ArrayList<Animal> lista = new ArrayList<Animal>();    
         Scanner in = new Scanner(System.in);
         Animal animal;
+        boolean insert = true;
         
         // Inserisco gli animali
         do {
-        System.out.print("Inserisci [s] per uno squalo o [c] per un cane: ");
+        System.out.print("Inserisci [s] per uno squalo, [c] per un cane, [q] per smettere: ");
         char c = in.nextLine().toLowerCase().charAt(0);
             switch (c)
             {
@@ -25,11 +26,14 @@ class Main {
                     System.out.println("Aggiungo un cane...");
                     animal = new Dog();
                     lista.add(animal);
-                    break;    
-            default: System.out.println("Scelta non valida!");            
+                    break;
+            case 'q':
+                    insert = false;
+                    break;   
+            default: 
+                    System.out.println("Scelta non valida!");           
             }
-        System.out.println("Inserisci qualcosa per un nuovo animale, altrimenti premi INVIO");
-        } while (in.hasNext());
+        } while (insert);
         
         // Tutti gli animali fanno ciao...!
         for (int i=0; i < lista.size(); i++)
