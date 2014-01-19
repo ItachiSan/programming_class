@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     // Dati        
     int i, j;
     long long int k=0;
-    int value = atoi(argv[argc - 1]); // 1o array di char, normalizzato a 0   
+    int value = atoi(argv[argc - 1]); // 1o array di char   
     
     printf("Dato: %i\n", value);
     
