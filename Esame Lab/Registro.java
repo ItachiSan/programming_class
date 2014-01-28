@@ -18,6 +18,14 @@ class Registro {
             elenco.add(e);
     }
 
+    public Esame cercaEsame(String nome, int matricola){
+        for (int i=0; i < elenco.size(); i++)
+            if (elenco.get(i).getCorso().equals(nome) && elenco.get(i).getMatricola() == matricola){
+                return elenco.get(i);
+        }
+        return null;
+    }
+
     public Esame rimuoviEsame(String nome, int matricola){
         for (int i=0; i < elenco.size(); i++)
             if (elenco.get(i).getCorso().equals(nome) && elenco.get(i).getMatricola() == matricola){
@@ -26,6 +34,18 @@ class Registro {
                 return f;
         }
         return null;
+    }
+    
+    public Esame getEsame(int index){
+        return elenco.get(index);
+    }
+    
+    public int numeroEsami(){
+        return elenco.size();
+    }
+    
+    public String getDocente(){
+        return docente;
     }
     
     public void ordina(){
