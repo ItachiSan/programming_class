@@ -17,7 +17,7 @@ public class Volo {
 	
 	public void addPrenotazione(Passeggero p){
 		for(Passeggero x : prenotazioni){
-			// if(!(x.getPasseggero().equals(p.getPasseggero()))){ // L'equals è di Object, tornerà sempre false
+			    if(!(x.getPasseggero().equals(p.getPasseggero()))){ // Sono stupido io, confronto tra stringhe
 				prenotazioni.add(p);
 				if(p instanceof PasseggeroStar){
 					((PasseggeroStar) p).aggiornaBonus(bonus);
