@@ -25,6 +25,6 @@ public class PasseggeroStar extends Passeggero{
 	}
 	
 	public String toString(){
-		return super.toString() + " (bonus "+bonus;
+		return super.toString() + " (bonus "+bonus + ")";
 	}
 }
