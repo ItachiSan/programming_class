@@ -22,21 +22,28 @@ class Esercizio2 {
 	comando = new StringTokenizer(in.nextLine(),",");
 	} catch (NoSuchElementException e) {
 		System.out.println("Errore");
-		break;
+		comando = null;
 	}
 	
-	// Impostiamo 
-	String op = comando.nextToken();
-	String nome = comando.nextToken();
+	// Impostiamo
+	String op, nome;
+	try { 
+	    op = comando.nextToken();
+	    nome = comando.nextToken();
+	} catch (NoSuchElementException f) {
+	    System.out.println("Errore nella formattazione");
+		op = nome = ""; // Evitiamo rotture nella compilazione
+	}	
 	
 	// Controllo lunghezza comando
-	if (op.length() != 1)
+	if (comando == null && op.length() != 1)
 		{
 		System.out.println("Errore nel comando");
 		break;
 		}
 		
 	// Operiamo
+	if (! op.equals("") )
 	switch(op.toLowerCase().charAt(0)){
 		case 'v':	V.add(new Volo(nome, (bonus = Integer.parseInt(comando.nextToken()) ) ) );
 				    voli++;
