@@ -25,21 +25,25 @@ public class Esercizio1 {
 		String s=in.nextLine();
 		
 		while(s.length()>0){
-			comando=s.charAt(0);
-			System.out.print(comando+"\n");
+			comando=s.charAt(0); // Mettendo s.toLowerCase().charAt(0) eviti casini con maiuscole e minuscole...
+                                 // Per il momento, va bene anche aggiungere i casi nello switch
+			// System.out.print(comando+"\n");
 			nome=s.substring(2);
-			System.out.print(nome+"\n");
+			// System.out.print(nome+"\n");
 			
 			switch(comando){
 				case 'p':
+				case 'P':
 					V.addPrenotazione(new Passeggero(nome));
 					break;
 				
 				case 's':
+				case 'S':
 					V.addPrenotazione(new PasseggeroStar(nome, 10));
 					break;
 					
 				case 'q':
+				case 'Q':
 					stampaPasseggero(V.cerca(nome), nome, V);
 					break;
 					
