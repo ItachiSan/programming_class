@@ -16,19 +16,25 @@ public class Volo {
 	}
 	
 	public void addPrenotazione(Passeggero p){
-		for(Passeggero x : prenotazioni){
-			    if(!(x.getPasseggero().equals(p.getPasseggero()))){ // Sono stupido io, confronto tra stringhe
-				prenotazioni.add(p);
-				if(p instanceof PasseggeroStar){
-					((PasseggeroStar) p).aggiornaBonus(bonus);
-				}
-			}
+	    boolean assente = true;
+	    
+		for(int i = 0; assente && i < prenotazioni.size(); i++)
+	        if(prenotazioni.get(i).getPasseggero().equals(p.getPasseggero()))) // Sono stupido io, confronto tra stringhe
+		        assente = false;
+
+		if(assente)
+		    {        
+		    prenotazioni.add(p);
+		    int i = prenotazioni.indexOf(p); // Ritroviamo il passeggero (Teoricamente è l'ultimo, ma non si sa mai)
+		    if(prenotazioni.get(i) instanceof PasseggeroStar)
+		        ((PasseggeroStar) prenotazioni.get(i)).aggiornaBonus(bonus);
+		    }
 		}
 	}
 	
 	public Passeggero cerca(String s){
 		Passeggero p=null;
-		if((prenotazioni.indexOf(s))>-1){
+		if((prenotazioni.indexOf(s))>-1){ // Cerchi una stringa in un insieme di passeggeri? Buona fortuna!
 			// p=new Passeggero(s); <- ritorni un nuovo passeggero, non quello che cerchi
 		}
 		return p;
