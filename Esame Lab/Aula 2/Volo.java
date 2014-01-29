@@ -19,7 +19,7 @@ public class Volo {
 	    boolean assente = true;
 	    
 		for(int i = 0; assente && i < prenotazioni.size(); i++)
-	        if(prenotazioni.get(i).getPasseggero().equals(p.getPasseggero()))) // Sono stupido io, confronto tra stringhe
+	        if(prenotazioni.get(i).getPasseggero().equals(p.getPasseggero())) // Sono stupido io, confronto tra stringhe
 		        assente = false;
 
 		if(assente)
@@ -30,11 +30,10 @@ public class Volo {
 		        ((PasseggeroStar) prenotazioni.get(i)).aggiornaBonus(bonus);
 		    }
 		}
-	}
 	
 	public Passeggero cerca(String s){
-        for(int i = 0; assente && i < prenotazioni.size(); i++)
-	        if(prenotazioni.get(i).getPasseggero().equals(s)))
+        for(int i = 0; i < prenotazioni.size(); i++)
+	        if(prenotazioni.get(i).getPasseggero().equals(s))
 	            return prenotazioni.get(i); // Trovato!
 	    return null;
 	    }
