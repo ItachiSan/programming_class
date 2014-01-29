@@ -1,5 +1,5 @@
 public class PasseggeroStar extends Passeggero{
-	String nominativo;
+	// String nominativo; <- Inutile, già in passeggero
 	int bonus;
 	
 	public PasseggeroStar(String n){
@@ -17,7 +17,7 @@ public class PasseggeroStar extends Passeggero{
 	}
 	
 	public String getPasseggero(){
-		return nominativo;
+		return super.getPasseggero(); // Estendiamo Passeggero, usiamo i suoi metodi
 	}
 	
 	public int getBonus(){
