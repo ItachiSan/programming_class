@@ -24,7 +24,7 @@ class Volo {
 			if (p instanceof PasseggeroStar)
 				{
 				clienti.add((PasseggeroStar) p);
-				((PasseggeroStar) clienti.get(clienti.indexOF(p))).addBonus();
+				// ((PasseggeroStar) (clienti.get(clienti.indexOf(p)))).addBonus(bonus);
 				}
 			else // Cliente standard
 				clienti.add(p);

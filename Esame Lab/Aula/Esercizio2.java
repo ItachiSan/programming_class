@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-class Esercizio1 {
+class Esercizio2 {
 	public static void main(String args[]){
 	
 	// Roba utile
@@ -38,28 +38,28 @@ class Esercizio1 {
 		
 	// Operiamo
 	switch(op.toLowerCase().charAt(0)){
-		case 'v':	V.add(new Volo(nome, (bonus = comando.nextToken())));
-				voli++;
-				break;
+		case 'v':	V.add(new Volo(nome, (bonus = Integer.parseInt(comando.nextToken()) ) ) );
+				    voli++;
+				    break;
 		
 		case 'p': 	if (voli < 0 ) {System.out.println("Nessun volo"); break;}
-				V.get(voli).addPrenotazione(new Passeggero(nome));
-				break;
+				    V.get(voli).addPrenotazione(new Passeggero(nome));
+				    break;
 		
 		case 's':	if (voli < 0 ) {System.out.println("Nessun volo"); break;}
-				PasseggeroStar tizio = cercaS(nome,P);
-				if (tizio == null)
-					tizio = new PasseggeroStar(nome,bonus);
-				V.get(voli).addPrenotazione(tizio);
-				if (P.indexOf(tizio) == -1) 
-					P.add(tizio);
-				else
-					((PasseggeroStar) P.get(P.indexOf(tizio))).addBonus(bonus);
-				break;
+				    PasseggeroStar tizio = cercaS(nome,P);
+				    if (tizio == null)
+					    tizio = new PasseggeroStar(nome,bonus);
+				    V.get(voli).addPrenotazione(tizio);
+				    if (P.indexOf(tizio) == -1) 
+				    	P.add(tizio);
+				    else
+				    	((PasseggeroStar) P.get(P.indexOf(tizio))).addBonus(bonus);
+				    break;
 		
 		case 'q':	if (voli < 0 ) {System.out.println("Nessun volo"); break;}
-				stampaPasseggero( V.get(voli).cerca(nome), nome, V.get(voli));
-				break;
+				    stampaPasseggero( V.get(voli).cerca(nome), nome, V.get(voli), P);
+				    break;
 		
 		default:	System.out.println("Comando non valido");
 		}
