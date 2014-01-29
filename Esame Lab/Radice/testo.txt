@@ -1,0 +1,64 @@
+Radice di un polinomio
+======================
+
+Descrizione
+-----------
+
+Se si considera un polinomio della forma
+
+p(x) = a(n) * x^n + a(n-1) * x^(n-1) + ... + a(2) * x^2 + a(1) * x - 1
+
+dove "^" indica l'elevamento a potenza, n e' un intero maggiore di 1 e
+a(1), ..., a(n) sono interi maggiori di 1, allora sicuramente
+
+p(0) = -1 < 0
+
+e
+
+p(1) = a(1) + a(2) + ... + a(n) -1 > n-1 > 0
+
+Quindi sicuramente esistera' (almeno) una radice del polinomio compresa tra 0
+e 1.
+
+Scrivere un programma che legga la descrizione di un siffatto polinomio
+interpretando gli argomenti specificati dalla linea di comando come i valori
+a(1), ..., a(n) e stampi il valore di un'approssimazione della radice del
+polinomio corrispondente, calcolata utilizzando il seguente procedimento, detto
+metodo di bisezione:
+
+- si parte considerando l'intervallo [0, 1], ai cui estremi il polinomio
+  assume rispettivamente un valore negativo e un valore positivo;
+- si determina il punto medio dell'intervallo e in esso si valuta il
+  polinomio:
+  * se il valore ottenuto e' 0 oppure risulta essere compreso tra -0.0000001 e
+    0.0000001 il punto medio e' l'approssimazione cercata, altrimenti
+  * se il valore e' positivo si sostituisce l'estremo destro dell'intervallo
+    con il punto medio
+  * se il valore e' negativo si sostituisce l'estreno sinistro dell'intervallo
+    con il punto medio
+- si itera il punto precedente fino a che non si e' determinata
+l'approssimazione della radice.
+
+
+Vincoli
+-------
+
+I coefficienti del polinomio devono essere indicati come argomenti nella linea
+di comando, partendo da a(n) e arrivando ad a(1). Il programma dovra'
+verificare che i valori specificati siano maggiori di 1, emettendo una
+IllegalArgumentException in caso contrario.
+
+L'output del programma deve essere su un'unica riga, senza inserire spazi prima
+o dopo il valore della radice.
+
+Esempio
+-------
+
+$ java Soluzione 2 3 4 6
+0.14984679222106934
+$ java Soluzione 2
+0.5
+$ java Soluzione 8
+0.125
+$ java Soluzione 3
+0.33333301544189453
