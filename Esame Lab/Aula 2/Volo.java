@@ -33,13 +33,11 @@ public class Volo {
 	}
 	
 	public Passeggero cerca(String s){
-		Passeggero p=null;
-		if((prenotazioni.indexOf(s))>-1){ // Cerchi una stringa in un insieme di passeggeri? Buona fortuna!
-			// p=new Passeggero(s); <- ritorni un nuovo passeggero, non quello che cerchi
-		}
-		return p;
-		
-	}
+        for(int i = 0; assente && i < prenotazioni.size(); i++)
+	        if(prenotazioni.get(i).getPasseggero().equals(s)))
+	            return prenotazioni.get(i); // Trovato!
+	    return null;
+	    }
 	
 	public String toString(){
 		return codice + " (bonus "+ bonus +" ) ";
