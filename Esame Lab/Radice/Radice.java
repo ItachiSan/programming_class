@@ -53,8 +53,11 @@ class Radice {
         f -= 1.0; // Aggiungo il -1
         
         // Scopriamo che fare
-        // if (f == 0.0 || Math.abs(f) < 0.0000001 ) <- Va bene anche questa
+        /* Approssimazione vecchia 
+        if (f == 0.0 || Math.abs(f) < 0.0000001 ) <- Va bene anche questa
         if (f == 0.0 || (f < 0.0000001 && f > -0.0000001) )
+        */
+        if (f == 0.0 || Math.abs(f) < 0.00000000001 )
             trovato = true;
         else if (f > 0)
             sup = media;

@@ -25,7 +25,7 @@ public class Volo {
 		if(assente)
 		    {        
 		    prenotazioni.add(p);
-		    int i = prenotazioni.indexOf(p); // Ritroviamo il passeggero (Teoricamente è l'ultimo, ma non si sa mai)
+		    int i = prenotazioni.indexOf(p); // Ritroviamo il passeggero (Teoricamente e' l'ultimo, ma non si sa mai)
 		    if(prenotazioni.get(i) instanceof PasseggeroStar)
 		        ((PasseggeroStar) prenotazioni.get(i)).aggiornaBonus(bonus);
 		    }

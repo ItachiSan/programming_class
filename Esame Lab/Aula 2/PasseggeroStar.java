@@ -1,5 +1,5 @@
 public class PasseggeroStar extends Passeggero{
-	// String nominativo; <- Inutile, già in passeggero
+	// String nominativo; <- Inutile, gia' in passeggero
 	int bonus;
 	
 	public PasseggeroStar(String n){

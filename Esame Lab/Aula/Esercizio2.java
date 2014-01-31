@@ -65,7 +65,8 @@ class Esercizio2 {
 				    break;
 		
 		case 'q':	if (voli < 0 ) {System.out.println("Nessun volo"); break;}
-				    stampaPasseggero( V.get(voli).cerca(nome), nome, V.get(voli), P);
+		            for (Volo x : V)
+				        stampaPasseggero( x.cerca(nome), nome, x, P);
 				    break;
 		
 		default:	System.out.println("Comando non valido");
