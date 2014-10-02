@@ -1,0 +1,12 @@
+Progettazione di un sistema di ristorazione per ristorante
+- Preparazione di piatti
+- Preparazione di ricette
+- Conteggio dei costi
+- Calcolo dei prezzi
+- Composizione di menu'
+
+# Astrazione
+piatto(nome,costo,prezzo)
+ricetta(piatto,ingrediente)
+ingrediente(nome,quantita')
+fornitura(materia,costo,fornitore)
