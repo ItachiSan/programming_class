@@ -1,0 +1,3 @@
+0)
+Created DB ${USER}_ristorante <-> CREATE DATABASE ristorante;
+Connect to it => psql -h www.silab.di.unimi.it -U gs840332 -d gs840332_ristorante

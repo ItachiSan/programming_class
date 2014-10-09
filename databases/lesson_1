@@ -1,0 +1,45 @@
+CREATE SCHEMA pippo: crea la tabella pippo
+---
+CREATE DATABASE 1: Dovrebbe avere la funzione di CREATE SCHEMA ma Postgres non lo implementa (implementa da solo CREATE SCHEMA)
+---
+Ogni DB ha piu' schemi
+---
+/*
+Creazione tabella per i dati dei cuochi
+Viene creata nella tabella utente (chiamata come l'utente N.B.)
+*/
+CREATE TABLE chef (
+	nickname 	char(5) PRIMARY KEY, -- char riempe gli spazi vuoti...
+	nome 		varchar(10), -- varchar no
+	cognome 	varchar(20),
+	stipendio 	numeric(6,2), -- 6 per cifre totali, 2 per cifre decimali
+	data_assunzione date,
+	esperienza 	real
+);
+---
+// Inseriamo valori
+INSERT INTO chef VALUES('borgo','Alessandro','Borghese',3500,'2013-10-10',7.63);
+INSERT INTO chef VALUES('crac','Carlo','Cracco',4200.5,'2012-05-01',9.44);
+---
+// Ricerca valori
+SELECT * FROM chef WHERE esperienza = 7.63;
+/*
+Permette di trovare tuple con 'esperienza' pari a 7.63...
+Ma non permette di valutare correttamente le uguaglianze in virgola mobile!
+Meglio un >=
+*/
+SELECT * FROM chef WHERE esperienza >= 7.63; -- Così funziona :D
+---
+INSERT INTO chef(nickname,nome,cognome) VALUES('massi','Massimiliano','Alajmo');
+/*
+Due cose:
+1) possiamo specificare cosa inserire
+2) errore: troppo lungo il nome Massimiliano
+*/
+INSERT INTO chef(nickname,nome,cognome) VALUES('anto ','Antonino','Cannavacciuolo '); // Funziona!
+---
+// Andiamo di SELECT
+SELECT * FROM chef WHERE nickname='anto '; -- Funziona anche con 'anto'
+SELECT * FROM chef WHERE cognome='Cannavacciuolo '; -- Non funziona con 'Cannavacciuolo'! char riempie gli spazi, varchar no
+SELECT nickname,char_length(nickname),cognome,char_length(cognome) FROM chef; -- Stampa nick, cognome e le lunghezze dei termini
+SELECT nome,cognome,to_char(data_assunzione, 'Day DD/MM/YYYY') FROM chef; -- Stampa nome, cognome e data formattata
