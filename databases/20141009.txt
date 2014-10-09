@@ -1,0 +1,165 @@
+/*
+Differenza database/schema:
+
+CREATE SCHEMA <nome_database>
+Comando standard per la creazione di un database.
+
+CREATE DATABASE <nome_database>
+Non esiste nello standard.
+
+
+In postgresql CREATE DATABASE e' equivalente a CREATE SCHEMA della standard.
+Ogni database in PostGreSQL contiene piu' schemi.
+*/
+------------------------------------------------------------------------------
+
+--CREATE TABLE
+--Creare una tabella chef per memorizzare i dati dei cuochi.
+CREATE TABLE chef (
+	nickname	char(5)		PRIMARY KEY,
+	nome		varchar(10),
+	cognome		varchar(20),
+	stipendio	numeric(6,2), -- (precisione,quante decimali)
+	data_assunzione	date,
+	esperienza	real	-- numeri reali
+);
+
+
+--INSERT
+INSERT INTO chef VALUES ('q1w2e', 'Alessandro', 'Pedersini', 1234, '2014-10-09', 8.00);
+INSERT INTO chef VALUES ('crac', 'Carlo', 'Cracco', 4200.5, '2012-05-01', 9.45);
+
+--SELECT
+SELECT * FROM chef WHERE esperienza = 8.00;
+-- I real sono pacchi perche' l'uguaglianza non sempre funzion
+
+INSERT INTO chef(nickname, nome, cognome) VALUES ('massi', 'Massimiliano', 'Alajmo');
+-- it doesnt work, ha!
+
+INSERT INTO chef(nickname, nome, cognome) VALUES ('anto ', 'Antonino', 'Cannavacciuolo ');
+-- it does work :D
+
+SELECT * FROM chef WHERE nickname='anto ';
+-- it works as you would expect
+
+SELECT * FROM chef WHERE cognome='Cannavacciuolo ';
+-- same
+
+SELECT * FROM chef WHERE nickname='anto'; -- char
+-- same
+
+SELECT * FROM chef WHERE cognome='Cannavacciuolo'; -- varchar
+-- :'c varchar works differently
+
+SELECT nickname, char_length(nickname), cognome, char_length(cognome) FROM chef;
+-- anto  e' di lunghezza 4 anche se abbiamo specificato uno spazio alla fine
+-- invece nel caso di Cannavacciulo  lo spazio viene contato.
+-- CHAR vs VARCHAR!
+
+SELECT * FROM chef WHERE cognome='cracco';
+-- case sensitive!
+
+SELECT nome, cognome, to_char(data_assunzione, 'Day DD/MM/YYYY') FROM chef;
+-- kewl!
+
+
+
+-- Tabella per le ricette
+CREATE TABLE ricetta (
+	id		serial	PRIMARY KEY, -- serial e' specifico di postgre
+	titolo		varchar(20)	NOT NULL,
+	tempo		integer,
+	presentazione	text
+);
+-- Serial produce una ID intera sequenziale univoca
+-- Text e' lungo a piacere. Non e' possibile fare interrogazioni puntali
+-- 	su tali campi.
+
+-- Gotta do some insert
+INSERT INTO ricetta(titolo, tempo, presentazione) 
+	VALUES ('Bavete al pesto', 25, 
+		'Le bavette al pesto sono una ricetta classica della tradizione ligure....');
+
+INSERT INTO ricetta(titolo, tempo, presentazione)
+	VALUES ('Arrosto di maiale', 40,
+	E'L\'arrosto di maiale e\' una ricetta tipica invernale...');
+-- La E all'inizio del testo avverte postgre che il testo contiene
+--	sequenze di escape
+
+INSERT INTO ricetta(titolo, tempo, presentazione) 
+	VALUES ('Sorbetto al limone', 20, 
+	E'Il sorbetto al limone e\' un gelato molto gradito e poco calorico...');
+
+
+-- Tabella per i piatti
+-- non e' possibile avere nome nullo in un piatto
+-- non esistono piatti con lo stesso nome
+CREATE TABLE piatto (
+	id		serial		PRIMARY KEY,
+	nome		varchar(20)	NOT NULL	UNIQUE,
+	ricetta		integer		REFERENCES ricetta(id)
+);
+
+-- some more insert
+INSERT INTO piatto(nome, ricetta) 
+	VALUES ('Le mie bavette al pesto', 1);
+-- we idiots, 20 characters aren't enough
+DROP TABLE piatto;
+
+CREATE TABLE piatto (
+	id		serial		PRIMARY KEY,
+	nome		varchar(50)	NOT NULL	UNIQUE,
+	ricetta		integer		REFERENCES ricetta(id)
+);
+
+
+INSERT INTO piatto(nome, ricetta)
+	VALUES ('Le mie bavette della nonna', 5);
+-- mi aspetto un errore. infatti mi ha dato un errore.
+
+UPDATE piatto SET ricetta = 5 WHERE nome='Le mie bavette al pesto';
+-- errore perche' non esiste una ricetta con id uguale a 5
+
+INSERT INTO piatto(nome)
+	VALUES ('Le mie bavette della nonna');
+-- non mi aspetto un errore, perche' il campo non e' NOT NULL
+
+-- NUOVO VINCOLO: un piatto ha una ed una sola ricetta associata
+-- modifichiamo la tabella!
+ALTER TABLE piatto ALTER COLUMN ricetta SET NOT NULL;
+-- Noooo non va perche' la tabella contiene una tupla con l'attributo ricetta nullo
+
+UPDATE piatto SET ricetta = 1 WHERE id = 3;
+-- mettiamo un id valido cosi' possiamo modificare i vincoli della tabella
+
+-- lets try this shall we?
+update ricetta set id=10 where id=1;
+-- error! violates foreign key constraint!
+
+-- ON UPDATE CASCADE!!!
+ALTER TABLE piatto DROP CONSTRAINT piatto_ricetta_fkey; -- distruggo il vincolo
+ALTER TABLE piatto ADD CONSTRAINT piatto_ricetta_fk	-- e lo ricreo con i nuovi constraints
+	FOREIGN KEY (ricetta) REFERENCES ricetta(id)
+		ON UPDATE CASCADE ON DELETE CASCADE;
+-- aggiornamento in cascata nel caso id di ricetta venga modificato!
+
+
+UPDATE ricetta SET id=10 WHERE id=1;
+-- vengono anche modificate le chiavi esterne in piatto
+
+UPDATE piatto SET ricetta=2 WHERE ricetta=10;
+-- aggiorna solo la tabella piatto, ma non quella ricetta
+
+DELETE FROM ricetta WHERE id=1;
+-- elimina la ricetta con id 1 senza nessun effetto su piatto
+
+DELETE FROM ricetta WHERE id=10;
+-- in cascata elimina anche le tuple in piatto con chiave esterna 
+--	che punta alla ricetta con id 10
+
+
+ALTER TABLE piatto ADD CONSTRAINT piatto_ricetta_fk
+	FOREIGN KEY (ricetta) REFERENCES ricetta(id)
+		ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- comportamento di default, non permette cancellazioni o aggiornamenti
+-- 	su chiavi referenziate in altre tabelle

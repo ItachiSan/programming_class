@@ -17,29 +17,76 @@ CREATE TABLE chef (
 	esperienza 	real
 );
 ---
-// Inseriamo valori
+Inseriamo valori
 INSERT INTO chef VALUES('borgo','Alessandro','Borghese',3500,'2013-10-10',7.63);
 INSERT INTO chef VALUES('crac','Carlo','Cracco',4200.5,'2012-05-01',9.44);
 ---
-// Ricerca valori
+Ricerca valori
 SELECT * FROM chef WHERE esperienza = 7.63;
-/*
+
 Permette di trovare tuple con 'esperienza' pari a 7.63...
 Ma non permette di valutare correttamente le uguaglianze in virgola mobile!
 Meglio un >=
-*/
+
 SELECT * FROM chef WHERE esperienza >= 7.63; -- Così funziona :D
 ---
 INSERT INTO chef(nickname,nome,cognome) VALUES('massi','Massimiliano','Alajmo');
-/*
+
 Due cose:
 1) possiamo specificare cosa inserire
 2) errore: troppo lungo il nome Massimiliano
-*/
+
 INSERT INTO chef(nickname,nome,cognome) VALUES('anto ','Antonino','Cannavacciuolo '); // Funziona!
 ---
-// Andiamo di SELECT
+Andiamo di SELECT
 SELECT * FROM chef WHERE nickname='anto '; -- Funziona anche con 'anto'
 SELECT * FROM chef WHERE cognome='Cannavacciuolo '; -- Non funziona con 'Cannavacciuolo'! char riempie gli spazi, varchar no
 SELECT nickname,char_length(nickname),cognome,char_length(cognome) FROM chef; -- Stampa nick, cognome e le lunghezze dei termini
 SELECT nome,cognome,to_char(data_assunzione, 'Day DD/MM/YYYY') FROM chef; -- Stampa nome, cognome e data formattata
+--- 2nd ROUND AKA Fine pausa
+Tabella ricetta
+CREATE TABLE ricetta(
+id serial PRIMARY KEY,
+titolo varchar(20) NOT NULL, -- Il titolo deve esistere!
+tempo integer, -- assumiamo blocchi interi di minuti
+presentazione text
+);
+E ora le ricette!
+INSERT INTO ricetta(titolo,tempo,presentazione) VALUES('Bavette al pesto',25,'Le bavette al pesto sono una ricetta classica della tradizione ligure...');
+INSERT INTO ricetta(titolo,tempo,presentazione) VALUES('Arrosto di maiale',40,E'L\'Arrosto di maiale è una ricetta tipica invernale...'); -- Per permettere di beccare l'escape
+INSERT INTO ricetta(titolo,tempo,presentazione) VALUES('Sorbetto al limone',20,'Il sorbetto al limone è un gelato molto gradito e poco calorico...');
+---
+Chiavi esterne! Intanto la tabella a cui accedere
+CREATE TABLE piatto(
+id serial PRIMARY KEY,
+nome varchar(20) NOT NULL UNIQUE, -- NOT NULL = vuoto no buono, UNIQUE = singolo per ogni piatto!
+ricetta integer REFERENCES ricetta(id) -- ricetta diventa l'ID 
+);
+INSERT INTO piatto(nome,ricetta) VALUES('Le mie bavette al pesto',1);
+DROP TABLE piatto; -- Distrugge la tabella
+
+Ricreo la tabella
+CREATE TABLE piatto(
+id serial PRIMARY KEY,
+nome varchar(50) NOT NULL UNIQUE, -- NOT NULL = vuoto no buono, UNIQUE = singolo per ogni piatto!
+ricetta integer REFERENCES ricetta(id) -- ricetta diventa l'ID 
+);
+
+INSERT INTO piatto(nome,ricetta) VALUES('Le bavette della nonna',5); -- Nessuna ricetta 5
+
+UPDATE piatto SET ricetta = 1 WHERE nome = 'Le mie bavette al pesto'; -- Imposto ricetta 
+
+INSERT INTO piatto(nome) VALUES('Le bavette della nonna');
+
+ALTER TABLE piatto ALTER COLUMN ricetta SET NOT NULL;
+
+UPDATE piatto SET ricetta=1 WHERE id=2; -- Imposto a manina 'ricetta'
+
+\d piatto; -- Mostra una visuale commentata e documentata della tabella
+
+--> UPDATE CASCADE: se aggiorno il valore della chiave aggiorno a cascata (quindi anche i riferimenti)
+
+ALTER TABLE piatto DROP CONSTRAINT piatto_ricetta_fkey; -- Rimuovo la chiave (standard)
+ALTER TABLE piatto ADD CONSTRAINT fkey_su_ricetta FOREIGN KEY ricetta REFERENCES ricetta(id) ON UPDATE CASCADE ON DELETE CASCADE; -- Aggiungo la nuova restrizione
+UPDATE ricetta SET id=10 WHERE id=1;
+
