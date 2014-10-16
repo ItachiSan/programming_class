@@ -86,3 +86,48 @@ ho errore in quanto ora 'Il marchesino' si chiama 'Il nuovo marchesino'; usando:
 UPDATE chef SET r_citta='Milano',r_nome='Il nuovo marchesino' WHERE nickname='margu';
 tutto funziona.
 ---
+Creare la tabella 'prodotto' sapendo che un prodotto ha
+* un codice
+* una marca
+* una quantita' disponibile
+* un prezzo
+* una data di acquisto
+* una scadenza
+* un paese di provenienza
+* una soglia di riordino
+Si sappia che la quantita' disponibile e il prezzo sono sempre non negativi (>=0).
+La data di acquisto e' inserita come data attuale.
+Marca, quantita' disponibile e soglia di riordino non possono essere nulli.
+
+CREATE TABLE prodotto(
+	codice		serial PRIMARY KEY,
+	marca		varchar(50) NOT NULL,
+	q_disp		numeric(5,2) NOT NULL CHECK (q_disp >= 0), -- CHECK fa controlli all'inserimento del dato!
+	prezzo		numeric(6,2) CHECK (prezzo >= 0), -- Sono 6 cifre con cui 2 dopo la virgola, ergo 4 intere!
+	data_acq	date DEFAULT now(), -- DEFAULT imposta il valore di default e now() ritorna il valore di inserimento 
+	scadenza	date CHECK(scadenza > data_acq), -- Verifico che la scadenza sia successiva alla data di acquisto
+	paese_prov	char(3), -- codifico come sigla del paese
+	soglia_r	integer NOT NULL
+);
+
+Per aggiornare automaticamente data_acq:
+* Aggiorno con UPDATE data_acq=now()
+* Creo un trigger --> Vedremo poi!
+---
+Insert varie:
+INSERT INTO prodotto(marca,q_disp,prezzo,scadenza,paese_prov,soglia_r) VALUES('De Cecco',200,1,'2020-01-20','ita',10);
+INSERT INTO prodotto(marca,q_disp,prezzo,scadenza,paese_prov,soglia_r) VALUES('De Cecco',-200,1,'2020-01-20','ita',10); -- Fallisce per q_disp negativo!
+INSERT INTO prodotto(marca,q_disp,prezzo,data_acq,paese_prov,soglia_r) VALUES('De Cecco',200,1,'2020-01-20','ita',10); -- Non fallisce, anche se il check dovrebbe 
+bloccarlo!
+---
+Aggiungo a 'prodotto' un attributo 'certificato' che puo' avere valore 'DOC'/'DOCG'/'IGT'
+ALTER TABLE prodotto ADD COLUMN certificato char(4) CHECK(certificato='DOC' OR certificato='DOCG' OR certificato='IGT');
+Ma cio' non mi piace! Usiamo un altro sistema!
+Creo un dominio (riutilizzabile, molto buono) e verifico l'appartenenza:
+CREATE DOMAIN dom_cert AS char(4) CHECK(VALUE IN('DOC','DOCG','IGT')); -- Si, creo un dominio e verifico che il valore sia corretto nell'array :D
+ALTER TABLE prodotto ADD COLUMN certificato dom_cert; -- Usando dom_cert richiamo il controllo
+
+Altre insert!
+INSERT INTO prodotto(marca,q_disp,prezzo,scadenza,paese_prov,soglia_r,certificato) VALUES(E'Terre d\'Italia',300,2,'2018-01-20','ita',10,'IGT'); -- la E becca gli escape values
+INSERT INTO prodotto(marca,q_disp,prezzo,scadenza,paese_prov,soglia_r,certificato) VALUES(E'Terre d\'Italia',300,2,'2018-01-20','ita',10,'SPQR'); -- Errore col 
+dominio del certificato!
