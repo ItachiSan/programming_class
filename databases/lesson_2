@@ -1,0 +1,88 @@
+2)
+Analisi varie funzioni di Postgres
+---
+\?  <- help
+\d  <- mostra il database
+\dt <- mostra le tabelle
+\d TABELLA <- mostra informazioni dettagliate sulla tabella
+---
+Verificare di avere le tuple degli chef
+
+CREATE TABLE chef (
+        nickname        char(5) PRIMARY KEY, -- char riempe gli spazi vuoti...
+        nome            varchar(10), -- varchar no
+        cognome         varchar(20),
+        stipendio       numeric(6,2), -- 6 per cifre totali, 2 per cifre decimali
+        data_assunzione date,
+        esperienza      real
+);
+
+INSERT INTO chef VALUES('borgo','Alessandro','Borghese',3500,'2013-10-10',7.63);
+INSERT INTO chef VALUES('crac','Carlo','Cracco',4200.5,'2012-05-01',9.44);
+
+Ripulita inoltre la tabella 'piatto'
+---
+Ora creiamo una tabella ristorante che descriva i luoghi di lavoro degli chef.
+Un ristorante ha un nome e una citta' di riferimento; ovviamente una citta' puo' avere piu' ristoranti.
+Il ristorante ha un indirizzo e puo' avere piu' chef che lavorino in un ristorante.
+
+-> Il nome del ristorante puo' essere ripetuto, ma non nella stessa citta'!
+CREATE TABLE ristorante(
+	nome_rist		varchar(50),
+	citta_rist		varchar(50),
+	indirizzo		varchar(100)	NOT NULL,
+	cap			char(5), -- integer serve solo per operazioni matematiche...
+	PRIMARY KEY(nome_rist,citta_rist) -- Si scrive cosi!!! <--------------------------------------------------- Never seen before
+);
+
+Mettere in ristorante un identificativo unico per chef e' atroce...
+Modifichiamo la tabella chef!
+Ci servono sia citta' che il nome del ristorante:
+
+ALTER TABLE chef ADD COLUMN r_nome varchar(50);
+ALTER TABLE chef ADD COLUMN r_citta varchar(50);
+ALTER TABLE chef ADD CONSTRAINT rist_fkey FOREIGN KEY(r_nome,r_citta)
+REFERENCES ristorante(nome_rist,citta_rist) ON UPDATE CASCADE ON DELETE SET NULL;
+
+Per testare uno chef:
+UPDATE chef SET r_nome='Il marchesino',r_citta='Milano' WHERE nickname='borgo';
+INSERT INTO ristorante(nome_rist,citta_rist) VALUES('Il marchesino','Milano');
+---
+Popoliamo meglio le tabelle... inserire il Marchesino!
+INSERT INTO ristorante(nome_rist,citta_rist) VALUES('La fermata','Alessandria');
+INSERT INTO ristorante(nome_rist,citta_rist) VALUES('Officina cucina','Brescia');
+
+INSERT INTO chef(nickname,nome,cognome,r_nome,r_citta) VALUES('riba','Andrea','Ribaldone','La fermata','Alessandria');
+INSERT INTO chef(nickname,nome,cognome,r_nome,r_citta) VALUES('main','Andrea','Mainardi','Officina Cucina','Brescia');
+
+L'ultimo INSERT fallisce, in quanto e' 'Officina cucina'!
+INSERT INTO chef(nickname,nome,cognome,r_nome,r_citta) VALUES('main','Andrea','Mainardi','Officina cucina','Brescia'); -- funziona
+
+Altro insert:
+INSERT INTO chef(nickname,nome,cognome,r_nome,r_citta) VALUES('margu','Gualtiero','Marchesi','Il marchesino');
+Funziona in quanto non sfrutto la chiave esterna: fino a quando non gli schiaffo i due valori corretti, non viene associato!
+Rimedio con:
+UPDATE chef SET r_citta='Milano' WHERE nickname='margu';
+
+Nota: droppare l'indirizzo come NOT NULL, per comodita' con
+ALTER TABLE ristorante ALTER COLUMN indirizzo DROP NOT NULL;
+Memoranda: per cancellare dalla tabella:
+DELETE FROM chef WHERE nickname='main'; -- cancella gli elementi con 'nickname'='main' dalla tabella/relazione 'chef'
+---
+Rimuovo la correzione a Marchesi:
+UPDATE chef SET r_citta=NULL WHERE nickname='margu';
+
+Vediamo gli chef associati alle citta'
+SELECT * FROM chef INNER JOIN ristorante ON(chef.r_nome=ristorante.nome_rist AND chef.r_citta=ristorante.citta_rist);
+Marchesi non appare perche' l'informazione sullo chef e' parziale
+
+Aggiorno il nome del Marchesino:
+UPDATE ristorante SET nome_rist='Il nuovo marchesino' WHERE nome_rist='Il marchesino';
+E a cascata aggiorna tutto.
+
+Se do ora:
+UPDATE chef SET r_citta='Milano' WHERE nickname='margu';
+ho errore in quanto ora 'Il marchesino' si chiama 'Il nuovo marchesino'; usando:
+UPDATE chef SET r_citta='Milano',r_nome='Il nuovo marchesino' WHERE nickname='margu';
+tutto funziona.
+---
