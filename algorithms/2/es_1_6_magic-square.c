@@ -23,27 +23,18 @@ int main(void){
     j=n/2;
         
     while(!end){ // Fake boolean
-        printf("Scrivo in [%d,%d] il valore %d\n",i,j,k);
         square[i][j]=k;
         k++;
         
         // Calculate new cohordinates
-        if(i==0)
-            i=n-1;
-        else
-            i--;
-            
-        if(j<n-1)
-            j++;
-        else
-            j=0;
-        
+        i=(i+(n-1))%n;
+        j=(j+1)%n;    
+
         if(square[i][j] != 0){
-            if(square[i+2][j-1] == 0){
-                i+=2;
-                j-=1;
+            if(square[(i+2)%n][(j+n-1)%n] == 0){
+                i=(i+2)%n;
+                j=(j+n-1)%n;
             } else {
-            printf("Ultima posizione testata: [%d,%d]\n",i,j);
             end=1;
             }
         }
@@ -55,6 +46,7 @@ int main(void){
         printf("\n");
     }
     
+    // Valore teoricamente sempre esatto
     for(i=0,k=0;i<n;i++){
         k+=square[i][0];
     }
@@ -68,7 +60,7 @@ int main(void){
             t+=square[i][j];
         if(t != k)
             {
-            printf("Errore nel controllo della colonna%d!\n", i);
+            printf("Errore nel controllo della colonna %d!\n", i);
             return EXIT_FAILURE;
             }
     }
@@ -85,6 +77,7 @@ int main(void){
     }
     
     // Diagonale 1
+    t=0;
     for(i=0;i<n;i++)
         t+=square[i][i];
     if(t != k){
@@ -93,19 +86,14 @@ int main(void){
     }
 
     // Diagonale 2
+    t=0;
     for(i=0;i<n;i++)
-        t+=square[n-i][i];
+        t+=square[n-(i+1)][i];
     if(t != k){
-        printf("Errore nel controllo della diagonale 1!\n");
+        printf("Errore nel controllo della diagonale 2!\n");
         return EXIT_FAILURE;
     }
     
     // Finiamo
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++)
-            printf("%d\t",square[i][j]);
-        printf("\n");
-    }
-        
     return EXIT_SUCCESS;
 }
