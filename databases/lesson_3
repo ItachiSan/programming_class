@@ -1,0 +1,52 @@
+Riflessioni su hba.conf:
+-h HOST <-> forza un socket TCP/IP come connessione a PostgreSQL
+
+---
+Esercizi di analisi
+>>>
+TYPE    DATABASE    USER        ADDRESS     METHOD
+host    all         stefano     ::1/128     trust
+host    all         all         ::1/128     md5
+host    all         stefano     ::0         reject
+<<<
+psql -U postgres -h localhost template1 <- usa la rule 2
+psql -U stefano template1 <- nessuna rule definita: ERRORE!
+psql -U stefano -h localhost template1 <- rule 3
+
+---
+Get ready for functions!
+Scaricare la base di dati qui sotto e lavoriamoci:
+http://islab.di.unimi.it/teaching/plpgsql_schema.sql
+Creare un DB per contenerlo (ex. risto_plpgsql)
+Caricare la basi di dati: il file .sql è un insieme di comandi per PostgreSQL
+Usare una shell e reindirizzare l'input con '< path/to/file'
+---
+Scripts! :D
+Corpo di una funzione
+>>>
+CREATE OR REPLACE FUNCTION funzione (___) RETURNS ____ AS $$
+DECLARE
+
+BEGIN
+
+END
+$$ LANGUAGE 'plpgsql';
+<<<
+
+Prima funzione: 
+CREATE OR REPLACE FUNCTION get_ingrediente_cat (varchar) RETURNS varchar AS $$
+DECLARE
+cat_risultato categoria.nome%TYPE;
+BEGIN
+SELECT categoria INTO cat_risultato FROM classificazione WHERE ingrediente = $1;
+RETURN cat_risultato;
+END
+$$ LANGUAGE 'plpgsql';
+
+A riga 39: categoria.nome%TYPE mi va a pigliare il tipo di categoria.nome 
+A riga 41: INTO qualcosa mi permette di salvare la query in un parametro
+
+Per usarla?
+SELECT * FROM get_ingrediente_cat(QUALCOSA);
+Esempio:
+SELECT * FROM get_ingrediente_cat('Bavette'); -- Ritorna 'Pasta'
