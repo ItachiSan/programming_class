@@ -33,14 +33,14 @@ END
 $$ LANGUAGE 'plpgsql';
 <<<
 
-Prima funzione: 
+Prima funzione: recuperare la categoria di un ingrediente
 CREATE OR REPLACE FUNCTION get_ingrediente_cat (varchar) RETURNS varchar AS $$
 DECLARE
 cat_risultato categoria.nome%TYPE;
 BEGIN
 SELECT categoria INTO cat_risultato FROM classificazione WHERE ingrediente = $1;
 RETURN cat_risultato;
-END
+END;
 $$ LANGUAGE 'plpgsql';
 
 A riga 39: categoria.nome%TYPE mi va a pigliare il tipo di categoria.nome 
@@ -50,3 +50,56 @@ Per usarla?
 SELECT * FROM get_ingrediente_cat(QUALCOSA);
 Esempio:
 SELECT * FROM get_ingrediente_cat('Bavette'); -- Ritorna 'Pasta'
+
+---
+Seconda funzione: recuperare i piatti senza una certa intolleranza
+CREATE OR REPLACE FUNCTION get_piatti_per_intolleranza (varchar) RETURNS SETOF varchar AS $$
+DECLARE
+ris_piatto piatto.nome%TYPE;
+BEGIN
+
+FOR ris_piatto IN
+SELECT piatto.nome FROM piatto WHERE id NOT IN(
+SELECT piatto FROM uso_prodotto INNER JOIN inadatto_a ON uso_prodotto.prodotto=inadatto_a.prodotto WHERE intolleranza=$1
+)
+LOOP
+RETURN NEXT ris_piatto;
+END LOOP;
+RETURN;
+
+END;
+$$ LANGUAGE 'plpgsql';
+
+A riga 56: SETOF serve per ritornare array di valori
+---
+Terza funzione
+>>>
+Prima una query per cercare codice prodotto, ingrediente e costo unitario per i prodotti del piatto PIPPO
+SELECT prodotto.id,prodotto.ingrediente,fornitura.costo_unitario FROM uso_prodotto INNER JOIN prodotto ON prodotto.id=uso_prodotto.prodotto INNER JOIN fornitura ON prodotto.id=fornitura.prodotto WHERE uso_prodotto.piatto=PIPPO;
+<<<
+
+E ora in funzione: calcolare il costo complessivo di un piatto
+CREATE OR REPLACE FUNCTION piatto_cost (mio_piatto varchar(50)) RETURNS numeric(6,2) AS $$
+DECLARE
+id_mio_piatto piatto.id%TYPE;
+p uso_prodotto.prodotto%TYPE;
+i prodotto.ingrediente%TYPE;
+cu fornitura.costo_unitario%TYPE;
+q ricetta_composizione.quantita%TYPE;
+r piatto.ricetta%TYPE;
+costo numeric(6,2);
+BEGIN
+costo := 0;
+SELECT id,ricetta INTO id_mio_piatto,r FROM piatto WHERE nome=mio_piatto;
+
+FOR p,i,cu IN
+SELECT prodotto.id,prodotto.ingrediente,fornitura.costo_unitario FROM uso_prodotto INNER JOIN prodotto ON prodotto.id=uso_prodotto.prodotto INNER JOIN fornitura ON prodotto.id=fornitura.prodotto WHERE uso_prodotto.piatto=id_mio_piatto
+
+LOOP
+SELECT quantita INTO q FROM ricetta_composizione WHERE ingrediente=i AND ricetta=r;
+costo:= costo + q * cu;
+END LOOP;
+
+RETURN costo;
+END;
+$$ LANGUAGE 'plpgsql';
