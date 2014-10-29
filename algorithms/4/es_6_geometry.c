@@ -15,6 +15,10 @@ typedef struct {
     punto v2;
 } rettangolo;
 
+typedef enum {
+    FALSE = 0,
+    TRUE = 1
+} Bool;
     
 rettangolo create_rettangolo(punto p1, punto p2){
     rettangolo rett;
@@ -35,11 +39,18 @@ void centro_rettangolo(rettangolo *r){
     printf("Centro: (%f,%f)\n", (r->v2.x - r->v1.x)/2, (r->v2.y - r->v1.y)/2);
 }
 
-void move_rettangolo(rettangolo *r, int x, int y){
+void move_rettangolo(rettangolo *r, float x, float y){
     r->v1.x+=x;
     r->v1.y+=x;
     r->v2.x+=y;
     r->v2.y+=y;
+}
+
+Bool check_punto(punto *p, rettangolo *r){
+    Bool value=FALSE;
+    if(p->x <= r->v2.x && p->x >= r->v1.x && p->y <= r->v2.y && p->y >= r->v1.y)
+         value=TRUE;
+    return value;
 }
 
 int main(int argc, char **argv){
@@ -59,7 +70,23 @@ int main(int argc, char **argv){
     print_rettangolo(&rett);
     printf("Area: %f\n", area_rettangolo(&rett));
     centro_rettangolo(&rett);
+    float x,y;
+    printf("Shift della X: ");
+    scanf(" %f", &x);
+    printf("Shift della Y: ");
+    scanf(" %f", &y);
+    move_rettangolo(&rett, x, y);
+    print_rettangolo(&rett);
+    punto p;
+    printf("Cordinata X punto da testare: ");
+    scanf(" %f", &p.x);
+    printf("Cordinata Y punto da testare: ");
+    scanf(" %f", &p.y);
+    Bool test=check_punto(&p, &rett);
+    if(test == TRUE)
+        printf("Contenuto\n");
+    else
+        printf("Non contenuto\n");
     
-
     return EXIT_SUCCESS;
 }
