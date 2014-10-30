@@ -1,0 +1,17 @@
+Esercizi:
+1)
+-Ragionamento
+Scelgo gli elementi 'ingrediente' da 'classificazione' tale che sia di categoria 'vegetale' e 'condimento'
+(Uso 'classificazione' perchè contiene tutto ciò che mi serve)
+Quindi
+Proj(nome)(ingrediente dove cat = vegetale) join naturale Proj(nome)(ingrediente dove cat = condimento) 
+-Query
+SELECT ingrediente FROM classificazione WHERE categoria='Condimento' INTERSECT SELECT ingrediente FROM classificazione WHERE categoria='Vegetale';
+Altre opzioni
+SELECT a.ingrediente FROM a.classificazione, b.classificazione WHERE a.categoria='Condimento' AND b.categoria='Vegetale' AND a.ingrediente=b.ingrediente;
+SELECT ingrediente FROM classificazione WHERE categoria='Condimento' AND ingrediente IN (SELECT ingrediente FROM classificazione WHERE categoria='Vegetale');
+2)
+-Ragionamento
+Per ogni fornitore, devo ritornare le sue forniture totali e la quantità totale di prodotto
+-Query
+SELECT fornitore, prodotto, count(*), sum(quantita) FROM fornitura GROUP BY fornitore;
