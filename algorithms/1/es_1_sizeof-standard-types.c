@@ -9,7 +9,7 @@ int main(void){
     unsigned long ul;
     unsigned short us;
     char c;
-    signed char uc;
+    signed char sc;
     unsigned char uc;
     
     

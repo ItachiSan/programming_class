@@ -5,7 +5,6 @@ int main(int argc, char **argv){
     printf("Disegniniiiiiiiiii\nScrivi un intero: ");
     scanf("%i", &n);
     
-    // Scrivi uno e adattalo per dominarli tuttiiiiiiiiii
     printf("\nPrimo disegno: Righe alterne\n");
     for(i=0; i < n; i++){
         for(j=0; j < n; j++)
@@ -39,7 +38,7 @@ int main(int argc, char **argv){
         }
    
 
-    if(n%2!= 0){ // n e' dispari, disegnamo anche il rombo
+    if(n%2!= 0){
     printf("\nQuarto disegno: Rombi\n");
     int k=n%2+1;
     for(i=0; i < n; i++){
@@ -49,7 +48,7 @@ int main(int argc, char **argv){
             else if(j < k)
                 if ((k-j) <= i%k) printf("o");
                 else printf("|");
-            else // if (j > k)
+            else
                 if ((j-k) <= i%k) printf("o");
                 else printf("|");                
         printf("\n");

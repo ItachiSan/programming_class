@@ -8,7 +8,7 @@ int main(void){
     printf("Cifrario di Cesare\n");
     printf("Inserire la frase: ");
     scanf("%i ", &k);
-    k=k%26; // Evitiamoci problemi
+    k=k%26; /* Fixing the offset */
     while( (c=getchar()) != '.' && c != '\n'){
         t=tolower(c) - 'a';
 	t=(t+k)%26;

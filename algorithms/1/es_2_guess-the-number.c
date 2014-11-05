@@ -20,7 +20,7 @@ int main(void){
             low=guess;
             guess=up-((up-low)/2);
         }
-        else if ( c != '=') // Evita il messaggio di errore nell'ultima iterazione
+        else if ( c != '=')
             printf("Errore, reinserisci\n");       
     }
     
