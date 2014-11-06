@@ -1,0 +1,140 @@
+5)
+Continuiamo con le funzioni!
+E soprattutto... TRIGGERS!
+
+Funzione generica:
+CREATE OR REPLACE FUNCTION . RETURNS . AS $$
+DECLARE
+
+BEGIN
+
+END;
+$$ LANGUAGE 'plpgsql';
+
+Partiamo!
+--Dato un piatto calcola il costo complessivo della sua realizzazione e lo memorizza nell'attributo piatto.costo
+
+CREATE OR REPLACE FUNCTION piatto_cost(integer) RETURNS VOID AS $$
+DECLARE
+-- p, per come e' dichiarato, ha la stessa struttura di una tupla di piatto
+p piatto%ROWTYPE;
+prod prodotto.id%TYPE;
+cu fornitura.costo_unitario%TYPE;
+ingr prodotto.ingrediente%TYPE;
+q ricetta_composizione.quantita%TYPE;
+c piatto.costo%TYPE;
+BEGIN
+c:=0;
+SELECT * INTO p FROM piatto WHERE id=$1;
+FOR prod,ingr,cu IN SELECT uso_prodotto.prodotto,prodotto.ingrediente,costo_unitario FROM uso_prodotto INNER JOIN prodotto ON uso_prodotto.prodotto=prodotto.id INNER JOIN fornitura ON prodotto.id=fornitura.prodotto WHERE piatto=p.id
+LOOP
+SELECT quantita INTO q FROM ricetta_composizione WHERE ingrediente=ingr AND ricetta=p.ricetta;
+--aggiorna variabile costo
+IF (q IS NOT NULL AND c IS NOT NULL) THEN
+    c:=c+q*cu;
+END IF;
+END LOOP;
+--aggiorna costo in tabella piatto
+UPDATE piatto SET costo = c WHERE id = $1;
+-- e' VOID, quindi RETURN vuoto
+RETURN;
+END;
+$$ LANGUAGE 'plpgsql';
+
+Da creare prima dell'utilizzo:
+ALTER TABLE piatto ADD COLUMN costo numeric(7,2);
+
+----
+Ora vediamo di usare i trigger!
+In generale:
+CREATE TRIGGER trigger <WHEN?> <EVENT?> FOR EACH ROW EXECUTE PROCEDURE roba();
+
+Ora:
+WHEN=prima
+EVENT=inserimento su uso_prodotto
+
+CREATE TRIGGER new_uso_prodotto AFTER INSERT ON uso_prodotto FOR EACH ROW EXECUTE PROCEDURE calcola_new_costo();
+
+CREATE OR REPLACE FUNCTION calcola_new_costo() RETURNS TRIGGER AS $$
+BEGIN
+-- Si usa un PERFORM invece di un SELECT, in quanto non mi interesso del valore di ritorno (VOID)
+PERFORM * FROM piatto_cost(NEW.piatto);
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+Per droppare un trigger:
+DROP TRIGGER new_uso_prodotto ON uso_prodotto;
+
+----
+Ora aggiorniamo i costi dei piatti quando modifico le forniture e quindi i costi unitari degli ingredienti!
+-- Trigger
+CREATE TRIGGER update_fornitura AFTER UPDATE ON fornitura FOR EACH ROW EXECUTE PROCEDURE check_costo_unitario();
+-- Funzione
+CREATE OR REPLACE FUNCTION check_costo_unitario RETURNS TRIGGER AS $$
+DECLARE
+p uso_prodotto.piatto%TYPE;
+BEGIN
+IF(OLD.costo_unitario <> NEW.costo_unitario) THEN
+    FOR p in SELECT piatto FROM uso_prodotto INNER JOIN fornitura ON uso_prodotto.prodotto=fornitura.prodotto WHERE uso_prodotto.prodotto=NEW.prodotto
+    LOOP
+    PERFORM * FROM piatto_cost(p);
+    END LOOP;
+END IF;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+Verifichiamo con
+UPDATE fornitura SET costo_unitario=1.2 WHERE prodotto=1;
+UPDATE fornitura SET costo_unitario=costo_unitario+costo_unitario*0.05;
+Per la seconda faccio una marea di controlli inutili, cosi' no:
+CREATE TRIGGER update_fornitura AFTER UPDATE ON fornitura FOR EACH STATEMENT EXECUTE PROCEDURE check_costo_unitario();
+Ma così non posso usare OLD e NEW! Quindi devo modificare la funzione!
+
+CREATE OR REPLACE FUNCTION check_costo_unitario() RETURNS TRIGGER AS $$
+DECLARE
+p uso_prodotto.piatto%TYPE;
+BEGIN
+FOR p IN SELECT distinct piatto FROM uso_prodotto
+LOOP
+PERFORM * FROM piatto_cost(p);
+END LOOP;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+----
+Ora creiamo un trigger che emetta un messaggio di avviso se, aggiornando un prodotto, questo scende sotto la lista di riordino
+
+CREATE TRIGGER update_prodotto AFTER UPDATE ON prodotto FOR EACH ROW EXECUTE PROCEDURE check_disponibilita();
+
+CREATE OR REPLACE FUNCTION check_disponibilita() RETURNS TRIGGER AS $$
+BEGIN
+-- NEW in quanto la nuova tabella e non quella vecchia
+IF (NEW.soglia_riordino > NEW.qnt_disponibile) THEN
+    RAISE INFO E'La disponibilita\' del prodotto e\' scarsa. Eseguire il riordino di %', NEW.marca || ' ' || NEW.ingrediente;
+END IF;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+
+Verifico con
+UPDATE prodotto SET qnt_disponibile = 8 WHERE id=1;
+
+Se voglio fare un RAISE tale da bloccare tutto:
+CREATE OR REPLACE FUNCTION check_disponibilita() RETURNS TRIGGER AS $$
+BEGIN
+IF (NEW.qnt_disponibile <0 ) THEN
+    -- Eccezioneeeeeeee
+    RAISE EXCEPTION E'La disponibilita\' del prodotto e\' insufficente. Eseguire il riordino di %', NEW.marca || ' ' || NEW.ingrediente;
+END IF;
+RETURN NULL;
+END;
+$$ LANGUAGE 'plpgsql';
+
+Per usare il trigger e non il costraint del prodotto
+DROP TRIGGER update_prodotto ON prodotto;
+CREATE TRIGGER update_prodotto BEFORE UPDATE ON prodotto FOR EACH ROW EXECUTE PROCEDURE check_disponibilita();

@@ -1,0 +1,167 @@
+-- Esercitazione:
+
+/* Esercizio 1
+ * Determinare il nome degli ingredienti che sono sia di categoria vegetali
+ * sia di categoria condimento
+ */
+SELECT a.ingrediente
+FROM classificazione AS a JOIN classificazione AS b
+ ON a.ingrediente = b.ingrediente
+WHERE a.categoria = 'Vegetali' AND b.categoria = 'Condimento';
+
+-- senza join
+SELECT ingrediente
+FROM classificazione
+WHERE categoria = 'Vegetali' OR categoria = 'Condimento'
+GROUP BY ingrediente
+HAVING COUNT(*) = 2;
+
+-- con intersezione
+SELECT ingrediente
+FROM classificazione
+WHERE categoria = 'Vegetali'
+ INTERSECT
+SELECT ingrediente
+FROM classificazione
+WHERE categoria = 'Condimento';
+
+-- subquery
+SELECT ingrediente
+FROM classificazione AS a
+WHERE categoria = 'Vegetali' AND 
+ EXISTS (
+	SELECT ingrediente
+ 	FROM classificazione
+	WHERE categoria = 'Condimento' AND ingrediente = a.ingrediente
+	);
+
+-- select innestata
+SELECT ingrediente
+FROM classificazione
+WHERE categoria = 'Vegetali' AND ingrediente IN (
+	SELECT ingrediente
+ 	FROM classificazione
+	WHERE categoria = 'Condimento'
+);
+
+/* Esercizio 2
+ * Determinare il numero di forniture e la quantita' totale di prodotto
+ * fornito per ogni fornitore registrato nella base di dati
+ */
+SELECT fornitore, prodotto, COUNT(*), SUM(quantita)
+FROM fornitura
+GROUP BY fornitore, prodotto;
+
+INSERT INTO fornitura VALUES(12, 'KDDSBD201B78210D', '2014-10-30', 50, 1);
+INSERT INTO fornitura VALUES(12, 'KDDSBD201B78210D', '2014-10-31', 50, 1);
+
+INSERT INTO fornitore(cf, nominativo, citta) VALUES ('ASDF', 'Gino Fornitura', 'Milano');
+
+-- versione giusta con gli zeri
+SELECT cf, prodotto, COUNT(prodotto), SUM(quantita)
+FROM fornitore LEFT OUTER JOIN fornitura
+ ON cf = fornitore
+GROUP BY cf, prodotto;
+
+
+/* Esercizio 3
+ * Determinare, ogni ...
+ */
+
+/* Esercizio 4
+ * Determinare la ricetta con il maggior numero di ingredienti
+ */
+-- brutta soluzione, non considera il caso in cui ci siano piu' ricette con il
+--  massimo numero di ingredienti
+SELECT ricetta, COUNT(*) AS cnt
+FROM ricetta_composizione
+GROUP BY ricetta
+ORDER BY cnt DESC
+LIMIT 1; -- limita la lunghezza della tabella risultante a una riga
+
+-- con having
+SELECT ricetta, COUNT(ingrediente) AS cnt
+FROM ricetta_composizione
+GROUP BY ricetta
+HAVING COUNT(ingrediente) >= ALL (
+	SELECT COUNT(ingrediente)
+	FROM ricetta_composizione 
+	GROUP BY ricetta
+);
+
+-- con view
+CREATE VIEW ingredienti_per_ricetta(ricetta, num_ingredienti) AS
+SELECT ricetta, COUNT(ingrediente)
+FROM ricetta_composizione
+GROUP BY ricetta;
+
+SELECT * FROM ingredienti_per_ricetta;
+
+SELECT ricetta, MAX(num_ingredienti)
+FROM ingredienti_per_ricetta
+GROUP BY ricetta
+HAVING MAX(num_ingredienti) >= ALL (
+	SELECT num_ingredienti 
+	FROM ingredienti_per_ricetta
+);
+
+/* Esercizio 4
+ * Determinare i prodotti (espressi come marca e ingrediente) che sono adatti
+ * per l'intolleranza al glutine
+ */
+-- select nidificata (semplificazione della EXCEPT)
+--  se sostituisco NOT IN con <> ALL il costo esplode D:
+SELECT id, marca, ingrediente
+FROM prodotto
+WHERE id NOT IN (
+	SELECT prodotto
+	FROM inadatto_a
+	WHERE intolleranza='Glutine'
+);
+
+-- con outer join (it doesnt work)
+SELECT id, marca, ingrediente
+FROM prodotto LEFT OUTER JOIN inadatto_a
+ ON id = prodotto
+WHERE intolleranza <> 'Glutine' OR intolleranza IS NULL;
+--                                 ^ perche' se intolleranza e' null l'altra
+--                      condizione e' falsa, ma ugualmente non
+--                      funziona nel caso in cui un ingrediente abbia due intolleranze
+
+
+/* Esercizio 5
+ * Per ogni prodotto (espresso come marca e ingrediente), determinare
+ * il numero di piatti in cui e' utilizzato (compresi i prodotti che non sono
+ * utilizzati in alcun piatto)
+ */
+SELECT id, marca, ingrediente, COUNT(piatto) AS piatti
+FROM prodotto LEFT OUTER JOIN uso_prodotto
+ ON prodotto.id = uso_prodotto.prodotto
+GROUP BY id;
+
+-- solo prodotti di marca = 'Mercato'
+SELECT id, marca, ingrediente, COUNT(piatto) AS piatti
+FROM prodotto LEFT OUTER JOIN uso_prodotto
+ ON prodotto.id = uso_prodotto.prodotto
+WHERE marca = 'Mercato'
+GROUP BY id;
+
+
+-- solo prodotti di marca = 'Mercato'
+-- e che sono utilizzati in almeno due piatti
+SELECT id, marca, ingrediente, COUNT(piatto) AS piatti
+FROM prodotto LEFT OUTER JOIN uso_prodotto
+ ON prodotto.id = uso_prodotto.prodotto
+WHERE marca = 'Mercato'
+GROUP BY id
+HAVING COUNT(piatto) >= 2;
+
+
+-- per ogni piatto il numero di prodotti utilizzati per realizzarlo
+SELECT id, COUNT(prodotto) AS prodotti
+FROM piatto LEFT OUTER JOIN uso_prodotto
+ ON piatto.id = uso_prodotto.piatto
+GROUP BY id;
+
+-- controprova
+INSERT INTO piatto(nome, ricetta) VALUES('Taglioni al pesto', 2);
