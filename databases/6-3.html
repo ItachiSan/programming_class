@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Tag per il titolo della pagina: title -->
+        <title>Prepara una ricetta!</title>
+    </head>
+
+    <body>
+        <!-- H2 formatta il testo ad esso associato come se fosse un titolo (poco usato) -->
+        <h2>Scegli una ricetta da preparare</h2>
+        
+        <!-- form: mi permette di passare dei dati presi in una pagina
+             Metodi: POST -> passo alla pagina con il body
+                     GET  -> passo alla pagina nell'URL (per intenderci)
+             In questo caso passo a 6-4.php (post.php) dei parametri con la POST
+        -->
+        <form action="6-4.php" method="POST">
+            <!-- div: crea un blocco (paragrafo) dato un certo testo formattato in maniera neutra -->
+            <div>Indica il tipo della ricetta che desideri preparare:</div>
+            <!-- Esempio di campo di inserimento -->
+            <!-- input: permette di ricevere un input in ingresso -->
+            <input type="text" name="ricetta"/>
+
+            <div>
+            <!-- select: permette di scegliere un valore tra varie opzioni (specificate dai marcatori option) -->
+            <select name="categoria">
+            <option value="carne">Ricetta a base di carne</option>
+            <option value="pesce">Ricetta a base di pesce</option>
+            <option value="dolce">Ricetta di dolci</option>
+            </select>
+            </div>
+            <!-- input submit: invia un valore -->
+            <input type="submit" value="Invia richiesta"/>
+        </form>
+    </body>
+
+</html>

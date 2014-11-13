@@ -1,0 +1,33 @@
+/* Foglio di stile CSS
+Sono insiemi di proprietà... In maniera estremamente generica e generale */
+
+.testo_col{
+    font-weight: bold; /* Imposta il testo in grassetto */
+    color: red; /* Imposta il colore del testo */
+}
+
+/*
+margin: imposta un margine (spazio a sinistra) di n pixel
+padding: imposta una distanza minima tra gli elementi che caricano tale proprietà
+border: impostano i bordi, colori e dimensioni
+
+Per margin/padding si possono usare left/right/top/bottom per specificare un valore
+Tipo margin-left:2px;
+*/
+.rientro_testo{
+    margin:30px;
+    padding:20px;
+    border-style:solid;
+    border-color:black;
+    border-width:3px;
+}
+
+/*
+padding: così ingrandisce gli elementi
+margin-{top,bottom}: palese
+*/
+.spaziatura{
+    padding:10px;
+    margin-top:10px;
+    margin-bottom:10px;
+}

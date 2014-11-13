@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- meta: include metadati -->
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <!-- link: permette di usare elementi di altre pagine -->
+        <link href="6-5.css" type="text/css" rel="stylesheet">
+        <!-- Tag per il titolo della pagina: title -->
+        <title>Prepara una ricetta!</title>
+    </head>
+
+    <body>
+        <h2>Scegli una ricetta da preparare</h2>
+        <form action="6-4.php" method="POST" class="rientro_testo">
+            <!-- div: crea un blocco (paragrafo) dato un certo testo formattato in maniera neutra -->
+            <div class="testo_col">Indica il tipo della ricetta che desideri preparare:</div>
+            <!-- Esempio di campo di inserimento -->
+            <!-- input: permette di ricevere un input in ingresso -->
+            <input type="text" name="ricetta" class="spaziatura"/>
+
+            <div>
+            <select name="categoria" class="spaziatura">
+            <option value="carne">Ricetta a base di carne</option>
+            <option value="pesce">Ricetta a base di pesce</option>
+            <option value="dolce">Ricetta di dolci</option>
+            </select>
+            </div>
+
+            <input type="submit" value="Invia richiesta" class="spaziatura"/>
+        </form>
+    </body>
+
+</html>

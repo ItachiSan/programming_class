@@ -1,0 +1,34 @@
+6)
+Ultimo ripasso sui trigger
+Creare un trigger tale che inserendo un piatto in un menù, fissare il prezzo di vendita al costo del piatto +20%
+
+In generale
+CREATE TRIGGER trigger {BEFORE|AFTER} {INSERT|UPDATE|DELETE} ON <tabella?> FOR EACH ROW EXECUTE PROCEDURE qualcosa();
+...
+CREATE OR REPLACE FUNCTION qualcosa() RETURNS TRIGGER AS $$
+BEGIN
+...
+END
+$$ LANGUAGE 'plpgsql';
+
+L'esercizio ora:
+CREATE TRIGGER set_prezzo_piatto_menu AFTER INSERT OR UPDATE ON menu_composizione FOR EACH ROW EXECUTE PROCEDURE calcola_prezzo();
+CREATE OR REPLACE FUNCTION calcola_prezzo() RETURNS TRIGGER AS $$
+DECLARE
+    c piatto.costo%TYPE;
+BEGIN
+    SELECT costo INTO c FROM piatto WHERE id=NEW.piatto;
+    c:=c+c*0.2;
+    -- UPDATE menu_composizione SET prezzo_cliente = c WHERE menu = NEW.menu AND piatto = NEW.piatto; <- e' un loop infinito!
+    NEW.prezzo_cliente:=c;
+    RETURN NEW;
+END
+$$ LANGUAGE 'plpgsql';
+
+Verifico con
+INSERT INTO menu_composizione(piatto,menu) values(2,1);
+Se do
+UPDATE menu_composizione SET prezzo_cliente=5 WHERE piatto=2 AND id=1;
+
+---
+Ora parte Web! Yuppie :D
