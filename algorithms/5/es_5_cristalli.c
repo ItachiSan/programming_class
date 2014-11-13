@@ -29,33 +29,20 @@ void stampaMatrice(char **m, int n){
 }
 
 void crist(char **m, int r0, int c0, int l){
-    if(l == 1)
-        m[r0][c0]='*';
-    else
-        {
-            int i,c=l/2;
-            for(i=0;i < l; i++){
-                m[c][i]='.';
-                m[i][c]='.';
-            }
-            m[c][c]='*';
-            crist(m, 0,   0,   c-1);
-            crist(m, c+1, 0,   c-1);
-            crist(m, 0,   c+1, c-1);
-            crist(m, c+1, c+1, c-1);
-        }
-} 
-
-/*
-void crist(char **m, int r0, int c0, int l){
-    int i,j;
-    for(i=r0; i < l; i++)
-        for(j=c0; j < l; j++)
-            m[i][j]='o';
-} 
-*/
+    if(l > 0){
+        m[r0+l/2][c0+l/2]='*';
+        crist(m,r0,      c0,      l/2);
+        crist(m,r0+l/2+1,c0,      l/2);
+        crist(m,r0,      c0+l/2+1,l/2);
+        crist(m,r0+l/2+1,c0+l/2+1,l/2);
+    }
+}
 
 void cristallo(char **m, int l){
+    int i,j;
+    for(i=0; i < l; i++)
+        for(j=0; j < l; j++)
+            m[i][j]='.';
     crist(m,0,0,l);
 }
 
@@ -66,9 +53,8 @@ int main(int argc, char *argv[]){
     scanf("%d" , &t); // legge il tempo
     if(t >= 0 ){
         lato = latoCristallo(t); // dimensione della matrice
-        printf("%d\n", lato);
         matrix = creaMatrice(lato); // crea matrice per rappresentare il cristallo
-        cristallo(matrix, t); // costruisce il cristallo avente lato assegnato
+        cristallo(matrix, lato); // costruisce il cristallo avente lato assegnato
         stampaMatrice(matrix, lato); // stampa la matrice
     }
 
