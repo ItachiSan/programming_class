@@ -40,17 +40,23 @@ int main(int argc, char **argv){
 
     if(n%2!= 0){
     printf("\nQuarto disegno: Rombi\n");
-    int k=n%2+1;
+    int k=n/2;
     for(i=0; i < n; i++){
         for(j=0; j < n; j++)
-            if(i == k || j == k)
-                printf("o");
-            else if(j < k)
-                if ((k-j) <= i%k) printf("o");
-                else printf("|");
+            if(i < k)
+                if (j < k)
+                    if ((k-j) <= i) printf("o");
+                    else printf("|");
+                else
+                    if ((j-k) <= i) printf("o");
+                    else printf("|");     
             else
-                if ((j-k) <= i%k) printf("o");
-                else printf("|");                
+                if (j < k)
+                    if ((k-j) <= n-i-1) printf("o");
+                    else printf("|");
+                else
+                    if ((j-k) <= n-i-1) printf("o");
+                    else printf("|");               
         printf("\n");
         }   
     }
