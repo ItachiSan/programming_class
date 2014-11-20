@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Programmazione DB/Web parte 2</title>
+    <!-- Carichiamo JQuery e UIkit -->
+    <link href="css/uikit.min.css" rel="stylesheet" type="text/CSS">
+    <script src="js/jquery.js"></script>
+    <script src="js/uikit.min.js"></script>
+</head>
+
+<body>
+    <!-- Un altro elemento di heading -->
+    <h1>Ciao :3</h1>
+    <!-- Una navbar UIkit -->
+    <nav class="uk-navbar">
+    <ul class="uk-navbar-nav">
+        <li class="uk-active"><a href="index-old.html">Vecchia home</a></li>
+        
+        <!-- data-uk-dropdown permette di fare il menu -->
+        <li class="uk-parent" data-uk-dropdown><a href="">Parametri</a>
+            <!-- Effetto dinamico, usa JQuery -->
+            <div class="uk-dropdown uk-dropdow-navbar">
+                <ul class="uk-nav uk-navbar">
+                    <li><a href="parameters/pass.php">Passaggio di parametri</a></li>
+                    <li><a href="parameters/menu.php">Creazione dinamica dei menu</a></li>
+                </ul>
+            </div>
+        </li>
+        
+        <li class="uk-parent" data-uk-dropdown><a href="">Cookie e sessioni</a>
+            <div class="uk-dropdown uk-dropdow-navbar">
+                <ul class="uk-nav uk-navbar">
+                    <li><a href="cookie_session/counter.php">Contatore</a></li>
+                    <li><a href="cookie_session/login_cookie.php">Login (cookie)</a></li>
+                    <li><a href="cookie_session/login_session.php">Login (session)</a></li>
+                </ul>
+            </div>
+        </li>
+        
+    </ul>
+</nav>
+</body>
+
+</html>
+<!--  -->
