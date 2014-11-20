@@ -11,9 +11,28 @@
 </head>
 
 <body>
-    <!-- Un altro elemento di heading -->
     <h1>Passaggio parametri GET/POST</h1>
-    <?php include_once('navigator.php');?>
+    <!-- Includi codice HTML/PHP con l'include...! -->
+    <?php include_once('../include/navigator.php');?>
+    <!-- Stampa elementi (in un array, ricorsivamente) passati col metodo GET -->
+    <?php if($_GET) print_r($_GET);?>
+
+    <!-- Form per richiesta multipla di input -->
+    <form class="uk-form" action="pass.php" method="GET">
+        <fieldset data-uk-margin>
+            <legend>Passaggio di parametri con il metodo GET</legend>
+            <input type="text" name="person[name]" placeholder="Nome">
+            <input type="text" name="person[surname]" placeholder="Cognome">
+            <input type="date" name="person[birthdate]" placeholder="Data di nascita">
+            <input type="number" name="person[height]" placeholder="Altezza (cm)">
+            <select name="pref_color">
+                <option value="#0000FF">Blu</option>
+                <option value="#FF0000">Rosso</option>
+                <option value="#00FF00">Verde</option>
+            </select>
+            <button class="uk-button">Invia dati</button>
+        </fieldset>
+    </form>
 
 </body>
 

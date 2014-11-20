@@ -1,5 +1,5 @@
 <!-- Una navbar UIkit, da importare con 'include' da PHP -->
-    <nav class="uk-navbar">
+<nav class="uk-navbar">
     <ul class="uk-navbar-nav">
         <li class="uk-active"><a href="../index-old.html">Vecchia home</a></li>
         
