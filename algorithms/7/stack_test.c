@@ -13,7 +13,7 @@ int main(int argc, char *argv[]){
     */
     if(is_empty() != 1)
         return EXIT_FAILURE;
-    
+    printf("Test 1 ok\n");
     /*
         Stack should be empty after make_empty
     */        
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
     make_empty();
     if(is_empty() != 1)
         return EXIT_FAILURE;
-
+    printf("Test 2 ok\n");
     /*
         Stack should be empty after popping out everything
         And also, top()==pop()

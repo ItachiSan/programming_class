@@ -16,6 +16,7 @@ void insert(int n, node *h){
         exit(1);
     nodo->num=n;
     nodo->next=h;
+    h=nodo;
 }
 
 void delete(node *h){
@@ -36,7 +37,8 @@ int length(node *h){
 void destroy(node *h){
     if(h->next != NULL)
         destroy(h->next);
-    free(h);
+    if(h != NULL)
+        free(h);
 }
 
 /*
