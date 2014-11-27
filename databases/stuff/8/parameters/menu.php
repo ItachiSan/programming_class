@@ -70,6 +70,22 @@ if(isset($_GET['mod'])){
     }
 } else
     show_list();
+    
+if(isset($_POST['prod']['type'])){
+    // <br /> <- forza un 'a capo' nel parser HTML
+    print('Grazie, inserirò il prodotto con dati: <br />'."\n");
+    
+    if(!empty($_POST['prod']['name']))
+        print('-> Nome: '.$_POST['prod']['name'].' <br />'."\n");
+    
+    if(!empty($_POST['prod']['brand']))
+        print('-> Marca: '.$_POST['prod']['brand'].' <br />'."\n");
+    
+    if(!empty($_POST['prod']['price']))
+        print('-> Prezzo: '.$_POST['prod']['price'].' '."\n");
+        
+    print('in archivio. <br />');
+}
 ?>
     </div>
     

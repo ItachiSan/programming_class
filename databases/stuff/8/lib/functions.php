@@ -40,9 +40,11 @@ function show_list() {
 	print('</table>');
 }
 
+//$_SERVER contiene informazioni sul server che gira PHP
+// PHP_SELF ritorna
 function show_form(){
     print('
-    <form class="uk-form" method="POST" action="menu.php">
+    <form class="uk-form" method="POST" action="'.$_SERVER['PHP_SELF'].'">
     <fieldset data-uk-margin>
     <legend>Inserisci un nuovo prodotto</legend>
 
@@ -57,6 +59,8 @@ function show_form(){
     <div class="uk-form-row">
     <input type="number" placeholder="Prezzo del prodotto" name="prod[price]">
     </div>
+    
+    <input type="hidden" name="prod[type]" value="insert_prod">
     
     <button class="uk-button">Inserisci prodotto</button>
     </fieldset>
