@@ -23,16 +23,46 @@
     <!-- Comodità del metodo GET: posso passare i parametri a manina! Tipo nei link sotto -->
     <nav>
         <ul class="uk-nav uk-nav-side">
+<?php // Bisogna non tabbarlo, altrimenti il primo elemento printato si prende gli spazi.... -.-"
+                $menu = Array(
+                    'Elenco dei prodotti'       =>'menu.php?mod=list',
+                    'Inserisci nuovi prodotti'  =>'menu.php?mod=insert',
+                    'Statistiche'               =>'menu.php?mod=stat'
+                );
+                
+                /*
+                Nota bene:
+                $var='Giovanni'
+                print('Ciao $var'); -> Ciao $var
+                print("Ciao $var"); -> Ciao Giovanni
+                */
+                
+                $keys=array_keys($menu); // Piglia i valori di ogni chiave dell'array 'menu'
+                //print_r($keys);
+                foreach($keys as $key){
+                    print("\t\t".'<li><a href="'.$menu[$key].'">'.$key.'</a></li>'."\n");
+                }
+?>
+            <!-- Genera:
             <li><a href="menu.php?mod=list">Elenco dei prodotti</a></li>
             <li><a href="menu.php?mod=insert">Inserisci nuovi prodotti</a></li>
-            <li><a href="menu.php?mod=stat">Statustiche</a></li>
+            <li><a href="menu.php?mod=stat">Statistiche</a></li>
+            -->
         </ul>
     </nav>
     
     </div> <!-- End of 2/10 -->
     
     <div class="uk-width-8-10">
-        Test segnaposto
+<?php
+if(isset($_GET['mod'])){
+    switch($_GET['mod']){
+        case 'insert':
+        case 'stat':
+        case 'list':
+    }
+}
+?>
     </div>
     
     </div> <!-- End of grid -->
