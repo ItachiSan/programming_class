@@ -59,17 +59,17 @@ include_once('../lib/functions.php');
 if(isset($_GET['mod'])){
     switch($_GET['mod']){
         case 'insert':
-            print('Inserisci');
+            show_form();
             break;
         case 'stat':
             print('Statistiche');
             break;
         case 'list':
-            print('Elenco');
+            show_list();
             break;
     }
 } else
-    print('Nessun parametro inserito');
+    show_list();
 ?>
     </div>
     
