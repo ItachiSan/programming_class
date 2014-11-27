@@ -55,13 +55,21 @@
     
     <div class="uk-width-8-10">
 <?php
+include_once('../lib/functions.php');
 if(isset($_GET['mod'])){
     switch($_GET['mod']){
         case 'insert':
+            print('Inserisci');
+            break;
         case 'stat':
+            print('Statistiche');
+            break;
         case 'list':
+            print('Elenco');
+            break;
     }
-}
+} else
+    print('Nessun parametro inserito');
 ?>
     </div>
     
