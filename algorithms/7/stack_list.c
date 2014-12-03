@@ -10,62 +10,46 @@
 
 node *list = NULL;
 
-void insert(int n, node *h){
-    node *nodo=malloc(sizeof(node));
-    if(nodo==NULL)
-        exit(1);
-    nodo->num=n;
-    nodo->next=h;
-    h=nodo;
-}
-
-void delete(node *h){
-    if(h != NULL && h->next != NULL){
-        node *temp=h->next;
-        free(h);
-        h=temp;
-    }
-}
-
-int length(node *h){
-    if(h == NULL)
-        return 0;
-    else
-        return length(h->next) + 1;
-}
-
-void destroy(node *h){
-    if(h->next != NULL)
-        destroy(h->next);
-    if(h != NULL)
-        free(h);
-}
-
-/*
-    Stack stuff
-*/
-
 void make_empty(){
-    destroy(list);
+    node *temp1=list->next, *temp2;
+    while(temp1 != NULL){
+        temp2=temp1->next;
+        free(temp1);
+        temp1=temp2;
+    }
+    free(list);
+    list=NULL;
 }
 
 int is_empty(){
-    if(length(list) == 0)
+    if(list == NULL)
         return 1;
     else
         return 0;
 }
 
 int top(){
-    return list->num;
-}
-
-int pop(){
-    int temp=top();
-    delete(list);
-    return temp;
+    if(list != NULL)
+        return list->num;
+    else
+        return -1;
 }
 
 void push(int n){
-    insert(n,list);
+    node *nodo=malloc(sizeof(node));
+    if(nodo==NULL)
+        exit(1);
+    nodo->num=n;
+    nodo->next=list;
+    list=nodo;
+}
+
+int pop(){
+    int value=top();
+    if(list != NULL && list->next != NULL){
+        node *temp=list->next;
+        free(list);
+        list=temp;
+    }
+    return value;
 }

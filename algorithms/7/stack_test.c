@@ -40,6 +40,6 @@ int main(int argc, char *argv[]){
         if(j != k)
             return EXIT_FAILURE;
     }
-
+    printf("Test 3 ok\n");
     return EXIT_SUCCESS;
 }
