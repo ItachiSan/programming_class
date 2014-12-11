@@ -8,6 +8,7 @@ if(isset($_GET['mod']) && $_GET['mod']=="sum1"){
     }
 if(isset($_GET['mod']) && $_GET['mod']=="set0"){
     $counter=0;
+    setcookie('visit','');
 }
     setcookie('visit', $counter, time()+120);
     setcookie('color', 'blue', time()+120);

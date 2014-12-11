@@ -4,6 +4,17 @@ $tipo = Array('Prodotto', 'Marca', 'Prezzo');
 $prodotto = Array('Spaghetti','Tortiglioni','Acqua','Cioccolato fondente');
 $marca = Array('De Cecco','Barilla','Vitasnella','Novi');
 $prezzo = Array(0.80, 0.50, 1.50, 3.20);
+$users = Array('luca' => md5('luca'), 'mario' => md5('mario'));
+
+function check_login($myuser, $mypass){
+    global $users;
+    //if(isset($users[$myuser]))
+    //    if($user[$myuser] == md5($mypass))
+    if(in_array($myuser, array_keys($users)))
+        if($users[$myuser] == md5($mypass))
+            $logged_user=$myuser;
+    return $logged_user;
+}
 
 function pre($data) {
     print '<pre style="background-color: transparent;">';
@@ -63,6 +74,26 @@ function show_form(){
     <input type="hidden" name="prod[type]" value="insert_prod">
     
     <button class="uk-button">Inserisci prodotto</button>
+    </fieldset>
+    </form>
+    ');
+}
+
+function show_login_form(){
+    print('
+    <form class="uk-form" method="POST" action="'.$_SERVER['PHP_SELF'].'">
+    <fieldset data-uk-margin>
+    <legend>Inserisci le credenziali</legend>
+
+    <div class="uk-form-row">
+    <input type="text" placeholder="Username" name="user">
+    </div>
+
+    <div class="uk-form-row">
+    <input type="password" placeholder="Password" name="psw">
+    </div>
+    
+    <button class="uk-button">Accedi</button>
     </fieldset>
     </form>
     ');
