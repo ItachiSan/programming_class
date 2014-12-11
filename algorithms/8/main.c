@@ -56,6 +56,7 @@ void merge(int a[], int sx, int dx, int l){
     */    
     for(i3=0; i3 < dx-sx+1; i3++)
         a[sx+i3]=b[i3];
+    free(b);
 }
 
 void mergesort(int a[], int sx, int dx){
