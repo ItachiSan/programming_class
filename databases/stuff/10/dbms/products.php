@@ -16,7 +16,10 @@
 <?php
 // Apriamo la connessione
 $db = open_pg_connection();
-
+if($db)
+    echo('Connected');
+else
+    echo('Not connected');
 ?>
 
 
