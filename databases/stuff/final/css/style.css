@@ -1,0 +1,11 @@
+body {
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.submenu {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
