@@ -31,14 +31,21 @@ else
 // Definire il comando SQL
 $sql = "SELECT p.*, i.intolleranza FROM prodotto p LEFT JOIN inadatto_a i ON p.id=i.prodotto";
 
-$cerca = '';
 if(isset($_POST['intolleranza'])){
-    $cerca = " WHERE intolleranza='".$_POST['intolleranza']."'";
-    $sql .= $cerca;
+    $where = $_POST['intolleranza'];
+    if($where <> '')
+    $sql .= " WHERE intolleranza = $1 AND marca = $2";
 }
 
+
+$result=pg_prepare($db, 'mysqlquery', $sql);
+$data = Array();
+
+if($where <> ''){
+    $data[] = $where;
+}
 // Elaborare il risultato
-$result=pg_query($db, $sql);
+$result=pg_execute($db, 'mysqlquery', $data);
 ?>
 <table class="uk-table uk-table-striped">
 <tr>
