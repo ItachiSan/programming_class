@@ -105,7 +105,7 @@ function open_pg_connection(){
     return pg_connect($connection);
 }
 
-function open_pg_connection($db){
+function close_pg_connection($db){
     pg_close($db);
 }
 ?>
