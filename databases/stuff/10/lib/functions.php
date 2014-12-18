@@ -98,4 +98,9 @@ function show_login_form(){
     </form>
     ');
 }
+
+function open_pg_connection(){
+    $connection = "host=".myhost." dbname=".mydb." user=".myuser." password".mypsw;
+    return pg_connect($connection);
+}
 ?>
