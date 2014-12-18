@@ -20,6 +20,12 @@ if($db)
     echo('Connected');
 else
     echo('Not connected');
+// Definire il comando SQL
+
+// Elaborare il risultato
+
+// Chiudere la connessione
+close_pg_connection($db);
 ?>
 
 
