@@ -2,6 +2,7 @@
 # Wrote following this tutorial:
 # https://rwmj.wordpress.com/2009/03/31/using-autoconf-for-ocaml-projects/
 bin_SCRIPTS = exercise_1$(EXEEXT)
+TESTS = $(bin_SCRIPTS)
 
 exercise_1$(EXEEXT): exercise_1.cmo
 	$(OCAMLC) $^ -o $@
