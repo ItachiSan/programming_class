@@ -7,13 +7,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 LT_INIT
 
-# Checks for programs.
-# Autoscan wanted ones.
-AC_PROG_INSTALL
-AC_PROG_LN_S
-AC_PROG_MAKE_SET
-
-# What we need.
+# Checks for programs we need.
 AC_ERLANG_NEED_ERLC
 AC_PROG_OCAML
 AX_PROG_SCALA
