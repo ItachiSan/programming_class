@@ -16,14 +16,17 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
-AC_PROG_RANLIB
+
 # What we need.
 AC_ERLANG_NEED_ERLC
 AC_PROG_OCAML
 AX_PROG_SCALA
+AX_PROG_SCALAC
 
 AC_CONFIG_FILES([Makefile
                  erlang/Makefile
                  ocaml/Makefile
+                 ocaml/normal/Makefile
+                 ocaml/normal/exercise_1/Makefile
                  scala/Makefile])
 AC_OUTPUT
