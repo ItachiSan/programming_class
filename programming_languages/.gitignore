@@ -21,3 +21,10 @@ Makefile.in
 /missing
 /stamp-h1
 
+# Things that were missed
+Makefile
+config.guess
+config.sub
+m4/lt*.m4
+m4/libtool.m4
+ltmain.sh
