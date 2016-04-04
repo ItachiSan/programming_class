@@ -1,15 +1,24 @@
 # Exercise specific Makefile.
 # Wrote following this tutorial:
 # https://rwmj.wordpress.com/2009/03/31/using-autoconf-for-ocaml-projects/
-bin_SCRIPTS = exercise_1$(EXEEXT)
-TESTS = $(bin_SCRIPTS)
+# Highly reworked though.
 
-exercise_1$(EXEEXT): exercise_1.cmo
-	$(OCAMLC) $^ -o $@
+# Define properly objects extension and source
+OBJEXT = cmo
+SUFFIXES = .ml
 
+# Section of program and test definition
+bin_PROGRAMS = exercise_1
+exercise_1_DEPENDENCIES = $(bin_PROGRAMS).$(OBJEXT)
+exercise_1_SOURCES = $(bin_PROGRAMS).ml
+TESTS = $(bin_PROGRAMS)
+
+# Rule to compile objects
 .ml.cmo:
 	$(OCAMLC) -c $< -o $@
 
-EXTRA_DIST = exercise_1.ml
+# Link in OCaML style
+LINK= $(OCAMLC) $^ -o $@
 
-CLEANFILES = *.cmi *.cmo $(bin_SCRIPTS) *~
+# Files to clean up
+CLEANFILES = *.cmi *.cmo $(bin_PROGRAMS) *~
