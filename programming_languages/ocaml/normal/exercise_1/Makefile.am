@@ -3,14 +3,11 @@
 # https://rwmj.wordpress.com/2009/03/31/using-autoconf-for-ocaml-projects/
 bin_SCRIPTS = exercise_1$(EXEEXT)
 
-PACKAGES = -package lablgtk2
-LIBS     = gtkInit.cmo -linkpkg
-
 exercise_1$(EXEEXT): exercise_1.cmo
-	$(OCAMLFIND) ocamlc $(PACKAGES) $(LIBS) $^ -o $@
+	$(OCAMLC) $^ -o $@
 
 .ml.cmo:
-	ocamlfind ocamlc $(PACKAGES) -c $< -o $@
+	$(OCAMLC) -c $< -o $@
 
 EXTRA_DIST = exercise_1.ml
 
