@@ -24,6 +24,7 @@ AC_CONFIG_FILES([Makefile
                  ocaml/normal/Makefile
                  ocaml/normal/exercise_1/Makefile
                  ocaml/normal/exercise_2/Makefile
+                 ocaml/normal/exercise_3/Makefile
                  erlang/Makefile
                  scala/Makefile])
 AC_OUTPUT
