@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/autotools
 
 ### Autotools ###
@@ -28,7 +27,17 @@ config.sub
 m4/lt*.m4
 m4/libtool.m4
 ltmain.sh
+build-aux/
+config.log
+config.status
+libtool
 test-driver
+
 # Build junk
 *.cmi
 *.cmo
+*.class
+*/*/exercise_*/exercise_*
+!*/*/exercise_*/exercise_*.ml
+!*/*/exercise_*/exercise_*.erl
+!*/*/exercise_*/exercise_*.scala
