@@ -41,17 +41,13 @@ class Slide_15_server_TCP {
                 InputStream clientOut = client.getInputStream();
                 OutputStream clientIn = client.getOutputStream();
                 // While we don't send our close message to the server...
-                while(Slide_15_server_TCP.running && this.running) {
+                while(running) {
                     // Read the client message
                     messageLength = clientOut.read(message);
                     messageString = new String(message, 0, messageLength);
                     // Reverse the string!
                     if (messageString.equals("bye")) {
                         reply = "bye";
-                        running = false;
-                    } else if (messageString.equals("shutdown")) {
-                        reply = "shutdown";
-                        Slide_15_server_TCP.running = false;
                         running = false;
                     }
                     else
@@ -75,9 +71,6 @@ class Slide_15_server_TCP {
         }
     }
 
-    // Boolean needed to handle the server shutdown.
-    static boolean running = true;
-
     // Actually, use the server
     public static void main(String[] args){
         // The sockets needed by the server
@@ -91,10 +84,10 @@ class Slide_15_server_TCP {
         try {
             serverSocket = new ServerSocket(0);
             System.out.println("server: starting with address " +
-                serverSocket.getInetAddress() +
-                " port " +
-                serverSocket.getLocalPort());
-            while (running){
+                    serverSocket.getInetAddress() +
+                    " port " +
+                    serverSocket.getLocalPort());
+            while (true) {
                 clientSocket = serverSocket.accept();
                 System.out.println("server: client connected with address " +
                         clientSocket.getInetAddress() +
@@ -102,8 +95,6 @@ class Slide_15_server_TCP {
                         clientSocket.getPort());
                 threadPool.execute(new ReverseString(clientSocket));
             }
-            System.out.println("Closing all threads...");
-            serverSocket.close();
         }
         catch (Exception e) {
             e.printStackTrace();
