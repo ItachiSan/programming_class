@@ -80,9 +80,18 @@ class Slide_15_server_TCP {
         // Allow up to 1024 clients!
         ScheduledThreadPoolExecutor threadPool = new ScheduledThreadPoolExecutor(1024);
 
+        // Let's configure the port to use for running the service
+        int port;
+        try {
+            port = Integer.parseInt(args[0]);
+        } catch (ArrayIndexOutOfBoundsException noargs) {
+            // Use a random port
+            port = 0;
+        }
+
         // Attempt of reverse server
         try {
-            serverSocket = new ServerSocket(0);
+            serverSocket = new ServerSocket(port);
             System.out.println("server: starting with address " +
                     serverSocket.getInetAddress() +
                     " port " +
@@ -119,7 +128,10 @@ class Slide_15_client {
         // Try to actually connect to the server
         try {
             // Get the host (in this case, localhost)
-            serverAddress = InetAddress.getLocalHost();
+            if (args.length == 0)
+                serverAddress = InetAddress.getLocalHost();
+            else
+                serverAddress = InetAddress.getByName(args[0]);
             // Create a socket address to the server, get the port from user input
             serverSocketAddress = new InetSocketAddress(serverAddress,
                     Integer.parseInt(bufferedReader.readLine()));
