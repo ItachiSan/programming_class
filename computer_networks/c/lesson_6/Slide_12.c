@@ -51,12 +51,12 @@ int resolve_name(char * mode, char * name, char * programname) {
 			printf("\tIP version: %s\n", type);
 			printf("\taddress length: %d\n", host->h_length);
 			// Cast addresses to proper data
-			struct in_addr ** address_list = (struct in_addr **) host->h_addr_list;
-			for(i = 0; address_list[i] != NULL; i++) {
-				printf("\taddress %4d :            %u\n", i, *address_list[i]);
-				printf("\taddress %4d (as string): %s\n", i,
-					inet_ntoa(*address_list[i])
-				);
+			//struct in_addr ** address_list = (struct in_addr **) host->h_addr_list;
+			for(i = 0; host->h_addr_list[i] != NULL; i++) {
+				struct in_addr a = *((struct in_addr *) host->h_addr_list[i]);
+				printf("\taddress %3d (int):    %u\n", i+1, a);
+				printf("\taddress %3d (string): %s\n", i+1, inet_ntoa(a));
+				//printf("\taddress %3d (double check): %u\n", i, inet_addr(inet_ntoa(a)));
 			}
 			return EXIT_SUCCESS;
 		}
