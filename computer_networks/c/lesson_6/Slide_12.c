@@ -43,13 +43,21 @@ int resolve_name(char * mode, char * name, char * programname) {
 			}
 			// Print all the data
 			printf("The data we got is:\n");
+			int i;
+			for(i = 0; host->h_aliases[i] != NULL; i++) {
+				printf("\talias %d: %s\n", i+1, host->h_aliases[i]);
+			}
 			printf("\thostname: %s\n", host->h_name);
 			printf("\tIP version: %s\n", type);
-			printf("\taddress: %s\n", host->h_addr_list[0]);
 			printf("\taddress length: %d\n", host->h_length);
-			printf("\taddress (int representation): %d\n",
-				inet_addr(host->h_addr_list[0])
-			);
+			// Cast addresses to proper data
+			struct in_addr ** address_list = (struct in_addr **) host->h_addr_list;
+			for(i = 0; address_list[i] != NULL; i++) {
+				printf("\taddress %4d :            %u\n", i, *address_list[i]);
+				printf("\taddress %4d (as string): %s\n", i,
+					inet_ntoa(*address_list[i])
+				);
+			}
 			return EXIT_SUCCESS;
 		}
 	} else if (strcmp(mode, "d") == 0) {
