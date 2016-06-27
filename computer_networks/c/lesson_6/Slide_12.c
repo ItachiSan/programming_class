@@ -54,7 +54,7 @@ int resolve_name(char * mode, char * name, char * programname) {
 			//struct in_addr ** address_list = (struct in_addr **) host->h_addr_list;
 			for(i = 0; host->h_addr_list[i] != NULL; i++) {
 				struct in_addr a = *((struct in_addr *) host->h_addr_list[i]);
-				printf("\taddress %3d (int):    %u\n", i+1, a);
+				printf("\taddress %3d (int):    %u\n", i+1, a.s_addr);
 				printf("\taddress %3d (string): %s\n", i+1, inet_ntoa(a));
 				//printf("\taddress %3d (double check): %u\n", i, inet_addr(inet_ntoa(a)));
 			}
