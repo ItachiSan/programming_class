@@ -94,7 +94,7 @@ int server_mode() {
 
 	while (running) {
 		// Clean up the message buffer
-		bzero(message, BUFFER);
+		memset(message, 0, BUFFER);
 		// Receive the message
 		result = recvfrom(socket_descriptor, message, BUFFER, 0,
 			(struct sockaddr *) &client_socket_address, &client_socket_address_length);
@@ -105,31 +105,32 @@ int server_mode() {
 			result);
 			// Close if we said bye properely
 			size_t message_length = result;
-			char * reply;
 			if (strncmp(message, "bye", message_length) == 0){
 				running = false;
-				reply = "bye"; 
+				memcpy(message, "bye", 4 * sizeof(char));
 			} else {
 				// Reverse the string
-				int i;
-				char real_reply[message_length];
-				for (i = 0; i < message_length; i++)
-					real_reply[i] = message[result-1-i];
-				// Add final character
-				//real_reply[message_length] = '\0';
-				// Point reply to the crafted string
-				reply = real_reply;
+				int i, k;
+				char c;
+				for (i = 0, k = message_length - 1; i < message_length/2; i++, k--) {
+					c = message[k];
+					message[k] = message[i];
+					message[i] = c;
+				}
 			}
 			// Send the reversed string
-			printf("server: reply message: %s\n", reply);
-			result = sendto(socket_descriptor, reply, message_length, 0,
-			(struct sockaddr *) &client_socket_address, client_socket_address_length);
-			printf("server: reply message after sendto: %s\n", reply);
+			printf("server: reply message: %s\n", message);
+			result = sendto(socket_descriptor, message, message_length, 0,
+				(struct sockaddr *) &client_socket_address,
+				client_socket_address_length
+			);
+			printf("server: reply message after sendto: %s\n", message);
 			// Report if we sent back the message properely
 			if (result > 0)
 				printf("server: sent string %s to client %s:%u\n",
-				reply, inet_ntoa(client_socket_address.sin_addr),
-				ntohs(client_socket_address.sin_port));
+					message, inet_ntoa(client_socket_address.sin_addr),
+					ntohs(client_socket_address.sin_port)
+				);
 			else
 				fprintf(stderr, "server: error in sendto (%s)", strerror(errno));
 		} else {
@@ -175,7 +176,7 @@ int client_mode(char * host, char * port) {
 
 	while (running) {
 		// Clean up the message buffer
-		bzero(message, BUFFER);
+		memset(message, 0, BUFFER);
 		// Read the message
 		printf("client: type the message to send: ");
 		scanf("%s", message);
@@ -185,16 +186,20 @@ int client_mode(char * host, char * port) {
 			(struct sockaddr *) &server_socket_address, server_socket_address_length);
 		if (result > 0) {
 			printf("client: sent string %s from client %s:%u\n",
-			message, inet_ntoa(server_socket_address.sin_addr),
-			ntohs(server_socket_address.sin_port));
+				message, inet_ntoa(server_socket_address.sin_addr),
+				ntohs(server_socket_address.sin_port)
+			);
 			// Receive the reversed string
 			result = recvfrom(socket_descriptor, message, BUFFER, 0,
-			(struct sockaddr *) &server_socket_address, &server_socket_address_length);
+				(struct sockaddr *) &server_socket_address,
+				&server_socket_address_length
+			);
 			// Report if we sent back the message properely
 			if (result > 0) {
 				printf("client: received string %s to client %s:%u\n",
-				message, inet_ntoa(server_socket_address.sin_addr),
-				ntohs(server_socket_address.sin_port));
+					message, inet_ntoa(server_socket_address.sin_addr),
+					ntohs(server_socket_address.sin_port)
+				);
 				// Close if we said bye properely
 				if (strncmp(message, "bye", 3) == 0)
 					running = false;
