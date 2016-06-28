@@ -179,7 +179,10 @@ int client_mode(char * host, char * port) {
 		memset(message, 0, BUFFER);
 		// Read the message
 		printf("client: type the message to send: ");
-		scanf("%s", message);
+		int i = 0;
+		char c;
+		while ((c = getchar()) != '\n' && i < BUFFER)
+			message[i++] = c;
 		size_t message_length = strlen(message);
 		// Receive the message
 		result = sendto(socket_descriptor, message, message_length, 0,
