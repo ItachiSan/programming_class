@@ -11,7 +11,7 @@
 #include <stdbool.h>
 
 // Maximum size of accepted message
-#define BUFFER 1024
+#define BUFFER 512
 
 // Give an usage message
 void usage(char * programname) {
@@ -104,19 +104,19 @@ int server_mode() {
 			ntohs(client_socket_address.sin_port),
 			result);
 			// Close if we said bye properely
-			int message_length = strlen(message);
-			char *reply;
+			size_t message_length = result;
+			char * reply;
 			if (strncmp(message, "bye", message_length) == 0){
 				running = false;
 				reply = "bye"; 
 			} else {
 				// Reverse the string
 				int i;
-				char real_reply[message_length+1];
+				char real_reply[message_length];
 				for (i = 0; i < message_length; i++)
 					real_reply[i] = message[result-1-i];
 				// Add final character
-				real_reply[message_length] = '\0';
+				//real_reply[message_length] = '\0';
 				// Point reply to the crafted string
 				reply = real_reply;
 			}
