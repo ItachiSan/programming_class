@@ -1,5 +1,5 @@
 -module(exercise_1).
--export([is_palindrome/1, is_an_anagram/2, factors/1, is_proper/1, primes/1, divisors/2]).
+-export([is_palindrome/1, is_an_anagram/2, factors/1, is_proper/1]). %, primes/1, divisors/2]).
 
 % The available function for checking a palindrome string.
 is_palindrome(S) -> check_palindrome(filter(S)).

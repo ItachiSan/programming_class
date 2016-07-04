@@ -14,6 +14,7 @@ void usage(char * programname) {
 	printf("\ts -> resolve a symbolic hostname (using DNS)\n");
 	printf("\td -> resolve a dotted hostname (a normal IP address)\n");
 	printf("\t     (can be used to check IP addresses)\n");
+	printf("If no MODE is passed, %s will use the symbolic resolve function\n", programname);
 }
 
 // Resolve the hostname and print it on screen.
@@ -43,12 +44,12 @@ int resolve_name(char * mode, char * name, char * programname) {
 			}
 			// Print all the data
 			printf("The data we got is:\n");
+			printf("\thostname: %s\n", host->h_name);
+			printf("\tIP version: %s\n", type);
 			int i;
 			for(i = 0; host->h_aliases[i] != NULL; i++) {
 				printf("\talias %d: %s\n", i+1, host->h_aliases[i]);
 			}
-			printf("\thostname: %s\n", host->h_name);
-			printf("\tIP version: %s\n", type);
 			printf("\taddress length: %d\n", host->h_length);
 			// Cast addresses to proper data
 			//struct in_addr ** address_list = (struct in_addr **) host->h_addr_list;
@@ -87,6 +88,9 @@ int main(int argc, char ** argv) {
 	*/
 
 	switch (argc) {
+		case 2:
+			printf("Using symbolic resolve...\n");
+			return resolve_name("s", argv[1], argv[0]);
 		case 3:
 			return resolve_name(argv[1], argv[2], argv[0]);
 		default:

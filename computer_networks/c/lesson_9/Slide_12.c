@@ -158,9 +158,9 @@ int server_mode() {
 	}
 
 	// Print the maximum value of open sockets the system can handle
-	printf("server: maximum socket (open file) number for FOPEN_MAX: %d\n", FOPEN_MAX);
-	printf("server: maximum socket (open file) number for getdtablesize(): %d\n", getdtablesize());
-	int max_sockets = FOPEN_MAX > getdtablesize() ? FOPEN_MAX : getdtablesize();
+	//printf("server: maximum socket (open file) number for FOPEN_MAX: %d\n", FOPEN_MAX);
+	//printf("server: maximum socket (open file) number for getdtablesize(): %d\n", getdtablesize());
+	int max_sockets = FOPEN_MAX < getdtablesize() ? FOPEN_MAX : getdtablesize();
 	printf("server: maximum accepted sockets: %d\n", max_sockets);
 
 	// Set up the socket for accepting TCP connection
@@ -248,6 +248,8 @@ int client_mode(char * host, char * port) {
 	server_socket_address.sin_addr = *((struct in_addr *) hostinfo->h_addr);
 	server_socket_address.sin_port = htons(atoi(port));
 
+	
+	/*
 	// Print local information
 	printf("client: data before connection: %s:%d\n",
 		inet_ntoa(socket_address.sin_addr),
@@ -276,6 +278,7 @@ int client_mode(char * host, char * port) {
 		inet_ntoa(socket_address.sin_addr),
 		ntohs(socket_address.sin_port)
 	);
+	*/
 
 	while (running) {
 		// Clean up the message buffer
