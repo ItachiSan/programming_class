@@ -37,6 +37,7 @@ test-driver
 *.cmi
 *.cmo
 *.class
+*.beam
 */*/exercise_*/exercise_*
 !*/*/exercise_*/exercise_*.ml
 !*/*/exercise_*/exercise_*.erl
