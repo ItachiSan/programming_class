@@ -1,0 +1,2 @@
+print x+y+z+1+x+-3 where x = 25, y = 1, z=-7
+print pippo+pluto+topolino+-100 where pippo=300,pluto=400,topolino=500
