@@ -3,7 +3,10 @@ apps = hello-world read-char reverse
 insecure = stack1-stdin
 insecure-targets = $(insecure:=_insecure)
 asm = stack.s
-default: $(apps) $(asm) $(insecure_targets)
+default: $(apps) $(asm) $(insecure-targets)
+
+test:
+	@echo $(insecure) to $(insecure-targets)
 
 # Compilation flags
 ASFLAGS = --32 --gstabs
@@ -27,4 +30,4 @@ LDFLAGS = -melf_i386
 	$(CC) $(CCFLAGS) -S $^ -o $@
 
 clean:
-	$(RM) $(apps) $(insecure_targets) $(apps:=.o) $(asm:.c=.o)
+	$(RM) $(apps) $(insecure-targets) $(asm) *.o

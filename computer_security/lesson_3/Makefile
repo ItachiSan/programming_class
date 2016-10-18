@@ -1,17 +1,14 @@
 # We want our print executable!
-apps = 
-insecure = 
+apps = ex_5.1 ex_5.2 
+insecure = ex_5.3
 insecure-targets = $(insecure:=_insecure)
 asm = 
 default: $(apps) $(asm) $(insecure-targets)
 
-test:
-	@echo $(insecure) to $(insecure-targets)
-
 # Compilation flags
 ASFLAGS = --32 --gstabs
 CCFLAGS = -m32 -ggdb
-INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack
+INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack -mpreferred-stack-boundary=2
 LDFLAGS = -melf_i386
 
 # Compile insecure C applications
