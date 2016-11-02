@@ -1,0 +1,28 @@
+#!/bin/sh
+
+if [ -z $1 ]
+then
+	echo "Usage: $0 <executable>"
+	echo "Return an array of characters that represent the binary code of the executable passed as input."
+else
+	# Dump the code from the binary
+	objdump -d $1 | \
+	# Get only lines with code
+	grep -E "^ .+:" | \
+	# Remove the bad number at the start
+	sed 's/ [0-9a-f]*:\t/ /' | \
+	# Get only the code
+	cut -f1 | \
+	# Replace spaces with commas
+	tr ' ' ',' | \
+	# Get only the useful part
+	rev | sed 's/[,]*//' | rev | \
+	# Delete the first comma
+	sed 's/,//' | \
+	# Add the '\x'
+	sed 's/,/\\x/g' | \
+	# Make it one line!
+	tr '\n' '.'| sed 's/\.//g'
+	# Print a newline to make easier to copy
+	echo
+fi
