@@ -23,6 +23,5 @@ real_code:
 reset_label:
 	call real_code
 
-.data
 sh:	.ascii "/bin/sh"
 	.byte 0
