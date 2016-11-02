@@ -12,7 +12,7 @@ print-targets:
 ASFLAGS = --64 --gstabs
 CCFLAGS = -m64 -ggdb
 INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack -mpreferred-stack-boundary=4
-LDFLAGS = -elf_x86_64
+LDFLAGS = -melf_x86_64
 
 # Compile insecure C applications
 %_insecure: %.c
