@@ -5,13 +5,13 @@ insecure-targets = $(insecure:=_insecure)
 asm = 
 default: $(apps) $(asm) $(insecure-targets)
 
-test:
+print-targets:
 	@echo $(insecure) to $(insecure-targets)
 
 # Compilation flags
 ASFLAGS = --32 --gstabs
 CCFLAGS = -m32 -ggdb
-INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack
+INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack -mpreferred-stack-boundary=4
 LDFLAGS = -melf_i386
 
 # Compile insecure C applications
