@@ -68,3 +68,8 @@ edx = indirizzo dell'ambiente
 
 # Per disassemblare
 objdump -d ELF
+
+# Note!
+Iniettando il candy shell, 'gets' sminchia lo standard input.
+Per sistemare, si fa:
+(perl -e 'print JUNK . VAR_ADDRESS'; cat) | ./insecure_executable
