@@ -6,7 +6,7 @@
 _start:
 	movq $0, %rdx # Third argument: pointer to NULL
 	movq $0, %rsi # Second argument: pointer to message
-	movq $0, %rdi # First argument: pointer to filename
+	movq $sh, %rdi # First argument: pointer to filename
 	movq $59, %rax # execve syscall number
 	syscall
 	# After the shell, exit
