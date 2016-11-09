@@ -1,6 +1,6 @@
 # We want our print executable!
-apps = 
-insecure = 
+apps = getenvaddr
+insecure = ex_6.3
 insecure-targets = $(insecure:=_insecure)
 asm = 
 default: $(apps) $(asm) $(insecure-targets)
@@ -11,7 +11,7 @@ print-targets:
 # Compilation flags
 ASFLAGS = --32 --gstabs
 CCFLAGS = -m32 -ggdb
-INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -z execstack -mpreferred-stack-boundary=2
+INSECURE_CCFLAGS = $(CCFLAGS) -fno-stack-protector -mpreferred-stack-boundary=2
 LDFLAGS = -melf_i386
 
 # Compile insecure C applications

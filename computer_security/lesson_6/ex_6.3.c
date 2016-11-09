@@ -10,7 +10,7 @@ int main (int argc, char ** argv) {
 	}
 
 	printf("Exploiting via returning into libc functions\n");
-	strcpy(buff, argv[1]);
-	printf("You tiped: %s\n", buff);
+	strcpy(buffer, argv[1]);
+	printf("You tiped: %s\n", buffer);
 	return 0;
 }
