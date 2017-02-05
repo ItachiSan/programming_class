@@ -1,0 +1,5 @@
+
+1.
+b *0x80488fb ->
+cambia il risultato della cmp con
+set $eax = 0
