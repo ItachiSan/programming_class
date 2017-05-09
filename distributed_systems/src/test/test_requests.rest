@@ -1,0 +1,23 @@
+# Test requests to be ran for the 'REST Client' extension of Visual Studio Code.
+
+# Hello class tests.
+GET http://localhost:8081/sdplab/rest/hello
+###
+GET http://localhost:8081/sdplab/rest/hello/Giovanni
+###
+GET http://localhost:8081/sdplab/rest/hello/Giovanni/Pietro
+###
+
+# Dictionary class tests.
+GET http://localhost:8081/sdplab/rest/dictionary/
+###
+POST http://localhost:8081/sdplab/rest/dictionary/Mamma/Toro
+###
+GET http://localhost:8081/sdplab/rest/dictionary/Mamma
+###
+PUT http://localhost:8081/sdplab/rest/dictionary/Mamma/Attenta
+###
+DELETE http://localhost:8081/sdplab/rest/dictionary/Mamma
+###
+GET http://localhost:8081/sdplab/rest/dictionary/_/
+Accept: application/json

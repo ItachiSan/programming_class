@@ -1,0 +1,9 @@
+# VSCode Java plugin
+.classpath
+.project
+.settings/
+# Gradle
+.gradle/
+# Build files
+build/
+bin/
