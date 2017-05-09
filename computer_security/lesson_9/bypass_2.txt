@@ -1,0 +1,16 @@
+Check in comune:
+- tra 5 e 8 caratteri
+- lowercase
+- charsum(user) = charsum(password)
+- caratteri non ripetuti
+
+Check user:
+- checksum(user)
+
+Check password:
+- inverso checksum(user) <- ruoto user di 1
+- caratteri in posizione pari decrescenti, in posizione dispari crescenti
+- primo e ultimo carattere diversi <- bypassata da 'caratteri non ripetuti'
+
+Tests:
+itachi

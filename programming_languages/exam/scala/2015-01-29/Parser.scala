@@ -63,7 +63,7 @@ object CSVParserCLI {
 				val s = f.mkString
 				f.close
 				parser.parseAll(parser.doc, s) match {
-					case parser.Success(result, _) => println(CSVFormatter.format(result))
+					case parser.Success(result, _) => println(result); println(CSVFormatter.format(result))
 					case parser.Error(message, _) => println("Error: " + message)
 					case parser.Failure(message, _) => println("Failure: " + message)
 				}

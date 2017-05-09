@@ -1,0 +1,23 @@
+Campo 1 (aVsrkTewwSvh):	[vsrk$teww{svh$% <- Wrong password
+Campo 2 (aPxxmYjXM):	Pxxm)yj||`x{m)*
+
+Estratto da IDA Pro
+...
+.data:0042AAA0 correct_pass_0 db 'b'                   ; DATA XREF: pass_check+62w
+.data:0042AAA0                                         ; pass_check:loc_410A73o ...
+.data:0042AAA1 correct_pass_1 db 'i'                   ; DATA XREF: pass_check+71w
+.data:0042AAA2 correct_pass_2 db 'K'                   ; DATA XREF: pass_check+81w
+.data:0042AAA3 correct_pass_3 db 'q'                   ; DATA XREF: pass_check+91w
+.data:0042AAA4 correct_pass_4 db '_'                   ; DATA XREF: pass_check+A0w
+.data:0042AAA4                                         ; pass_check+15Cw
+.data:0042AAA5 correct_pass_5 db 'l'                   ; DATA XREF: pass_check+B0w
+.data:0042AAA5                                         ; pass_check+172w
+.data:0042AAA6 correct_pass_6 db '4'                   ; DATA XREF: pass_check+C0w
+.data:0042AAA6                                         ; pass_check+189w
+.data:0042AAA7 correct_pass_7 db 'g'                   ; DATA XREF: pass_check+CFw
+.data:0042AAA7                                         ; pass_check+19Fw
+.data:0042AAA8 correct_pass_8 db 'z'
+...
+
+Quindi
+biKq_l4gz

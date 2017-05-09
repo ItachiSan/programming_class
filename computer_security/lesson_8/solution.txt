@@ -1,5 +1,10 @@
-
-1.
-b *0x80488fb ->
+# File @ http://security.di.unimi.it/sicurezza1617/homework4
+1. b *0x80488fb ->
 cambia il risultato della cmp con
 set $eax = 0
+-> forse no!
+
+2. b *0x8048902
+Skippa l'istruzione a 0x804890c con
+set $eip = 0x8048911
+Così pensa di aver eseguito la jump che vogliamo skippare

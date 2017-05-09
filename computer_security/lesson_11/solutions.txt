@@ -1,0 +1,18 @@
+sample01: welcome to 1969
+sample02: SECCOM{9001ibr}
+real01: sicurezza:s0mePCAPskill$!
+real02: flag.png
+Cerca la prima immagine dopo la richiesta 'upload'
+-> Ho trovato la richiesta di upload, un ottimo filtro per trovarla è
+   http.request.method == POST && http.request.line contains upload
+   Dopodichè di tale pacchetto ho estratto il file cliccando col destro in basso
+   nella sezione MIME su 'Encapsulated multipart part' con 'PNG', aprendolo si ha
+   l'immagine e ho scelto 'Export selected packet bytes...'
+real03: CTF{And_You_Thought_It_Was_In_The_Picture}
+Prendere gli urgent pointer
+tcp.urgent_pointer -> decodificare gli esadecimali
+-> dumpati tutti gli urgent pointer con
+   tshark -r real03.pcap -Y "tcp.flags.urg" -T fields -e tcp.urgent_pointer | tr -d '\n'
+   In una single line
+   tshark -r real03.pcap -T fields -e tcp.urgent_pointer -Y "tcp.flags.urg && tcp.urgent_pointer != 0" | \
+   xargs -Ix python -c "print(chr(x),end='')" ; echo
